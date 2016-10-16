@@ -1,0 +1,35 @@
+apply plugin: 'war'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile 'javax:javaee-api:7.0'
+}
+
+war {
+    baseName = 'stamp-rally'
+}
+
+ext {
+    asadmin = glassFishHome + (isWindows() ? '/bin/asadmin.bat'
+                                           : '/bin/asadmin')
+    domain = 'domain1'
+}
+
+def isWindows() {
+    return System.properties['os.name'].toLowerCase().contains('windows')
+}
+
+task startServer(type: Exec) {
+    commandLine asadmin, 'start-domain', '--debug=true', domain
+}
+
+task stopServer(type: Exec) {
+    commandLine asadmin, 'stop-domain', domain
+}
+
+task deploy(type: Exec, dependsOn: 'war') {
+    commandLine asadmin, 'deploy', '--force=true', war.archivePath
+}
