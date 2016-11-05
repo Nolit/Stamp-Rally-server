@@ -6,6 +6,7 @@ repositories {
 
 dependencies {
     compile 'javax:javaee-api:7.0'
+    compile 'org.eclipse.persistence:eclipselink:2.5.1'
 }
 
 war {
