@@ -32,6 +32,12 @@ public class Sample {
 
     @Column
     private String name;
+    
+    @Column
+    private String email;
+    
+    @Column
+    private Boolean gender;
 
     public Integer getId() {
         return id;
@@ -43,5 +49,21 @@ public class Sample {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public Boolean getGender() {
+        return gender;
+    }
+
+    public void setGender(Boolean gender) {
+        this.gender = gender;
     }
 }
