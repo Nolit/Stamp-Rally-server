@@ -3,12 +3,14 @@ apply plugin: 'war'
 repositories {
     mavenCentral()
 }
-
+sourceCompatibility = '1.7'
+targetCompatibility = '1.7'
 dependencies {
     compile 'javax:javaee-api:7.0'
     compile 'org.eclipse.persistence:eclipselink:2.5.1'
     compile 'com.fasterxml.jackson.core:jackson-core:2.3.+'
     compile 'com.fasterxml.jackson.core:jackson-databind:2.3.+'
+    providedCompile 'javax.websocket:javax.websocket-api:1.1'
 }
 
 war {
@@ -35,4 +37,8 @@ task stopServer(type: Exec) {
 
 task deploy(type: Exec, dependsOn: 'war') {
     commandLine asadmin, 'deploy', '--force=true', war.archivePath
+}
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
 }
