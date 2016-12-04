@@ -5,6 +5,8 @@
  */
 package database.entities;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import database.entities.Users;
 import java.io.Serializable;
 import java.util.Date;
@@ -26,6 +28,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  *
  * @author b3314
  */
+@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class)
 @Entity
 @Table(name = "friends")
 @XmlRootElement

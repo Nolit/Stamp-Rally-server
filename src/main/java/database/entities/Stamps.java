@@ -5,6 +5,8 @@
  */
 package database.entities;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import database.entities.Reports;
 import database.entities.Activities;
 import java.io.Serializable;
@@ -37,6 +39,7 @@ import javax.xml.bind.annotation.XmlTransient;
  *
  * @author b3314
  */
+@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class)
 @Entity
 @Table(name = "stamps")
 @XmlRootElement
