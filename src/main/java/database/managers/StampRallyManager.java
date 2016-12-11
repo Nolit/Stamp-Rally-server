@@ -9,9 +9,6 @@ import javax.persistence.PersistenceContext;
 public class StampRallyManager {
     @PersistenceContext
     private EntityManager em;
-    
-    //喰らえ！！
-    private String hogehoge ="水薮の馬鹿野郎";
 
     public void create(StampRallys stampRally){
         em.persist(stampRally);
