@@ -16,6 +16,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 /**
  *
  * @author karin757
@@ -33,9 +37,9 @@ public class SampleServlet extends HttpServlet {
 //        sm.create(new Sample("name"));
 
         //読み込み
-        Sample sample = sm.read(2);
+//        Sample sample = sm.read(2);
         ObjectMapper mapper = new ObjectMapper();
-        String json = mapper.writeValueAsString(sample);
+//        String json = mapper.writeValueAsString(sample);
 
         //更新
 //        Sample sample = sm.read(2);
@@ -46,6 +50,8 @@ public class SampleServlet extends HttpServlet {
 //        Sample sample = sm.read(2);
 //        sm.remove(sample);
 
+        List<Map<String, Object>> a = a();
+        String json = mapper.writeValueAsString(a);
         try (PrintWriter out = response.getWriter()) {
             out.println(json);
         }
@@ -68,4 +74,21 @@ public class SampleServlet extends HttpServlet {
         return "Short description";
     }// </editor-fold>
 
+    private List<Map<String, Object>> a(){
+        List<Map<String, Object>> list = new ArrayList<>();
+        Map<String, Object> stamp = new HashMap<>();
+        stamp.put("stampId", 1);
+        stamp.put("stampRallyId", 1);
+        stamp.put("latitude", 0);
+        stamp.put("latitude", 0);
+        stamp.put("title", "タイトル1");
+        stamp.put("note", "ノート１");
+        stamp.put("picture", "");
+        stamp.put("title", 1);
+        stamp.put("note", 1);
+        stamp.put("picture", 1);
+        stamp.put("picture", System.currentTimeMillis());
+        list.add(stamp);
+        return list;
+    }
 }

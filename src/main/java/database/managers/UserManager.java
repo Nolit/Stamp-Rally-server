@@ -19,6 +19,10 @@ public class UserManager {
        return em.find(Users.class, user_id);
     }
     
+    public void update(Users user){
+        em.merge(user);
+    }
+    
     public Users readByEmailAndPassword(String email, String password){
         List<Users> list = em.createNamedQuery("Users.findByMailAddressAndPassword", Users.class)
                 .setParameter("mailAddress", email)
