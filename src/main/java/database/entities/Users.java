@@ -57,6 +57,7 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Users.findByProfile", query = "SELECT u FROM Users u WHERE u.profile = :profile")
     , @NamedQuery(name = "Users.findByAdmissionDay", query = "SELECT u FROM Users u WHERE u.admissionDay = :admissionDay")
     , @NamedQuery(name = "Users.findByPrivateFlag", query = "SELECT u FROM Users u WHERE u.privateFlag = :privateFlag")
+    , @NamedQuery(name = "Users.findByMailAddressAndPassword", query = "SELECT u FROM Users u WHERE u.mailAddress = :mailAddress AND u.password = :password")
     , @NamedQuery(name = "Users.findByDeleteDate", query = "SELECT u FROM Users u WHERE u.deleteDate = :deleteDate")})
 public class Users implements Serializable {
 
