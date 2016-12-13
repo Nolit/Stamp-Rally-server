@@ -10,6 +10,7 @@ import database.entities.Activities;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
+import java.util.Map;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -32,6 +33,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
+import utilities.ImageSaver;
 
 /**
  *
@@ -95,17 +97,12 @@ public class Stamps implements Serializable {
 
     public Stamps() {
     }
-
-    public Stamps(Integer stampId) {
-        this.stampId = stampId;
-    }
-
-    public Stamps(Integer stampId, String picturePass, String stampName, String stampComment, Date stampDate) {
-        this.stampId = stampId;
-        this.picturePass = picturePass;
-        this.stampName = stampName;
-        this.stampComment = stampComment;
-        this.stampDate = stampDate;
+    
+    public Stamps(Map<String, Object> stampData) {
+        stampName = (String) stampData.get("title");
+        stampComment = (String) stampData.get("note");
+        stampDate = new Date((long) stampData.get("createDate"));
+        picturePass = "default";
     }
 
     public Integer getStampId() {

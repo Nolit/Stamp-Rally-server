@@ -8,6 +8,7 @@ package database.entities;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
+import java.util.Map;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -74,17 +75,12 @@ public class StampPads implements Serializable {
 
     public StampPads() {
     }
-
-    public StampPads(Integer stamptableId) {
-        this.stamptableId = stamptableId;
-    }
-
-    public StampPads(Integer stamptableId, String stampAddress, float latitude, float longitude, Date stampcreateDate) {
-        this.stamptableId = stamptableId;
-        this.stampAddress = stampAddress;
-        this.latitude = latitude;
-        this.longitude = longitude;
-        this.stampcreateDate = stampcreateDate;
+    
+    public StampPads(Map<String, Object> stampData) {
+        this.stampAddress = "default";
+        latitude = (long) stampData.get("latitude");
+        longitude = (long) stampData.get("longitude");
+        stampcreateDate = new Date((long) stampData.get("createDate"));
     }
 
     public Integer getStamptableId() {

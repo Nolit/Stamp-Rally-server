@@ -16,6 +16,7 @@ import database.entities.Activities;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
+import java.util.Map;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -38,6 +39,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
+import utilities.ImageSaver;
 
 /**
  *
@@ -57,6 +59,7 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Users.findByProfile", query = "SELECT u FROM Users u WHERE u.profile = :profile")
     , @NamedQuery(name = "Users.findByAdmissionDay", query = "SELECT u FROM Users u WHERE u.admissionDay = :admissionDay")
     , @NamedQuery(name = "Users.findByPrivateFlag", query = "SELECT u FROM Users u WHERE u.privateFlag = :privateFlag")
+    , @NamedQuery(name = "Users.findByMailAddressAndPassword", query = "SELECT u FROM Users u WHERE u.mailAddress = :mailAddress AND u.password = :password")
     , @NamedQuery(name = "Users.findByDeleteDate", query = "SELECT u FROM Users u WHERE u.deleteDate = :deleteDate")})
 public class Users implements Serializable {
 
@@ -156,15 +159,11 @@ public class Users implements Serializable {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId")
     private Collection<Activities> activitiesCollection1;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId")
-    private Collection<StampPads> stampPadsCollection;
+    private Collection<StampPads> myStampCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId")
-    private Collection<Stamps> stampsCollection;
+    private Collection<Stamps> clearStampCollection;
 
     public Users() {
-    }
-
-    public Users(Integer userId) {
-        this.userId = userId;
     }
 
     public Users(Integer userId, String searchId, String mailAddress, String password, String userName, boolean sex, Date birthday, String thumbnail, String profile, Date admissionDay, boolean privateFlag) {
@@ -429,20 +428,20 @@ public class Users implements Serializable {
 
     @XmlTransient
     public Collection<StampPads> getStampPadsCollection() {
-        return stampPadsCollection;
+        return myStampCollection;
     }
 
     public void setStampPadsCollection(Collection<StampPads> stampPadsCollection) {
-        this.stampPadsCollection = stampPadsCollection;
+        this.myStampCollection = stampPadsCollection;
     }
 
     @XmlTransient
     public Collection<Stamps> getStampsCollection() {
-        return stampsCollection;
+        return clearStampCollection;
     }
 
     public void setStampsCollection(Collection<Stamps> stampsCollection) {
-        this.stampsCollection = stampsCollection;
+        this.clearStampCollection = stampsCollection;
     }
 
     @Override
