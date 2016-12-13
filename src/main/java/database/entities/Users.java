@@ -60,7 +60,10 @@ import utilities.ImageSaver;
     , @NamedQuery(name = "Users.findByAdmissionDay", query = "SELECT u FROM Users u WHERE u.admissionDay = :admissionDay")
     , @NamedQuery(name = "Users.findByPrivateFlag", query = "SELECT u FROM Users u WHERE u.privateFlag = :privateFlag")
     , @NamedQuery(name = "Users.findByMailAddressAndPassword", query = "SELECT u FROM Users u WHERE u.mailAddress = :mailAddress AND u.password = :password")
-    , @NamedQuery(name = "Users.findByDeleteDate", query = "SELECT u FROM Users u WHERE u.deleteDate = :deleteDate")})
+    , @NamedQuery(name = "Users.findByDeleteDate", query = "SELECT u FROM Users u WHERE u.deleteDate = :deleteDate")
+    , @NamedQuery(name = "Users.findByLoginData", query = "SELECT  u FROM Users u WHERE u.mailAddress = :mailAddress AND u.password = :password")
+})
+
 public class Users implements Serializable {
 
     private static final long serialVersionUID = 1L;

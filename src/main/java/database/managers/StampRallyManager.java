@@ -1,6 +1,8 @@
 package database.managers;
 
 import database.entities.StampRallys;
+import java.util.ArrayList;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -25,5 +27,11 @@ public class StampRallyManager {
     public void remove(StampRallys stampRally){
         StampRallys deleteTarget = em.merge(stampRally);
         em.remove(deleteTarget);
+    }
+    
+    public List<StampRallys> search(String searchword){
+        return (List<StampRallys>) em.createNamedQuery("StampRallys.findBySearchKeyWord",StampRallys.class)
+        .setParameter("keyword", "%" + searchword + "%")
+        .getResultList();
     }
 }
