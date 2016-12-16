@@ -77,7 +77,7 @@ public class Stamps implements Serializable {
     @Column(name = "stamp_date")
     @Temporal(TemporalType.DATE)
     private Date stampDate;
-    @ManyToMany(mappedBy = "stampsCollection")
+    @ManyToMany(mappedBy = "structurePads")
     private Collection<StampRallys> stampRallysCollection;
     @JoinTable(name = "stamp_get_destinations", joinColumns = {
         @JoinColumn(name = "stamp_id", referencedColumnName = "stamp_id")}, inverseJoinColumns = {
@@ -93,7 +93,7 @@ public class Stamps implements Serializable {
     private Users userId;
     @JoinColumn(name = "stamptable_id", referencedColumnName = "stamptable_id")
     @ManyToOne(optional = false)
-    private StampPads stamptableId;
+    private StampPads stampPads;
 
     public Stamps() {
     }
@@ -189,12 +189,12 @@ public class Stamps implements Serializable {
         this.userId = userId;
     }
 
-    public StampPads getStamptableId() {
-        return stamptableId;
+    public StampPads getStampPads() {
+        return stampPads;
     }
 
-    public void setStamptableId(StampPads stamptableId) {
-        this.stamptableId = stamptableId;
+    public void setStampPads(StampPads stampPads) {
+        this.stampPads = stampPads;
     }
 
     @Override
