@@ -34,6 +34,8 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.omg.IOP.Encoding;
+import java.io.*;
 /**
  *
  * @author karin757
@@ -46,10 +48,12 @@ public class SearchServlet extends HttpServlet {
     
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-//        response.setContentType("text/html;charset=UTF-8");
         response.setContentType("application/json;charset=UTF-8");
+
             
-    List<StampRallys> stampRally = srm.search("ス");
+    String sr = request.getParameter("stamprally");
+    String decodesr = decodeString(sr);
+    List<StampRallys> stampRally = srm.search(decodesr);
     
         try (PrintWriter out = response.getWriter()) {
             for(StampRallys s : stampRally){
@@ -68,5 +72,16 @@ public class SearchServlet extends HttpServlet {
             throws ServletException, IOException {
         processRequest(request, response);
     }
+    
+    protected String decodeString(String decodesr){
+    try {
+      byte[] byteData = decodesr.getBytes("ISO_8859_1");
+      decodesr = new String(byteData, "UTF-8");
+    }catch(UnsupportedEncodingException e){
+      return null;
+    }
 
+    return decodesr;
+  }
+    
 }
