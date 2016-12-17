@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.IntFunction;
 import java.util.function.Predicate;
@@ -29,8 +30,6 @@ import utilities.ImageSaver;
 
 @WebServlet(name = "StampUploadServlet", urlPatterns = {"/stampUpload"})
 public class StampUploadServlet extends HttpServlet {
-
-    
     @EJB
     UserManager um;
     @EJB
@@ -39,7 +38,7 @@ public class StampUploadServlet extends HttpServlet {
     StampManager sm;     
     @EJB
     StampRallyManager srm;  
-//[{"stampRallyId":1,"note":1,"stampId":1,"latitude":0,"title":1,"picture":1481452995217}]
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String email = request.getParameter("email");
@@ -49,45 +48,29 @@ public class StampUploadServlet extends HttpServlet {
             return;
         }
         
-//        List<Map<String, Object>> stampList = new ObjectMapper().readValue(request.getParameter("stampList"), List.class);
-        List<Map<String, Object>> stampList = a();
+        List<Map<String, Object>> stampList = new ObjectMapper().readValue(request.getParameter("stampList"), List.class);
+//        List<Map<String, Object>> stampList = a();
         saveStamp(stampList, user);
         
-        Integer[] completedStampIds = (Integer[])extractCompletedAsId(stampList, user);
-        
+        Object[] completedStampIds = extractCompletedAsId(stampList, user);
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             out.println(new ObjectMapper().writer().writeValueAsString(completedStampIds));
         }
     }
     
-    private boolean isComplete(final Users user, int stampRallyId){
-        StampRallys stampRally = srm.read(stampRallyId);
-        
-        return stampRally.getStructurePads().stream().allMatch(new Predicate<StampPads>() {
-            @Override
-            public boolean test(final StampPads pad) {
-                return user.getStampsCollection().stream().anyMatch(new Predicate<Stamps>() {
-                    @Override
-                    public boolean test(Stamps myStamp) {
-                        return pad.getStamptableId().equals(myStamp.getStampPads().getStamptableId());
-                    }
-                });
-            }
-        });
-    }
-    
     private void saveStamp(List<Map<String, Object>> stampList, Users user){
         for(Map<String, Object> stampData : stampList){
-            Stamps myStamp = new Stamps(stampData);
             int stampId = (int)stampData.get("stampId");
             StampPads pad;
             if(stampId == 0){
                 pad = new StampPads(stampData);
                 spm.create(pad);
             }else{
-                pad = spm.read(stampId);
+                pad = sm.read(stampId).getStampPads();
             }
+            
+            Stamps myStamp = new Stamps(stampData);
             myStamp.setStampPads(pad);
             myStamp.setUserId(user);
             String picturePath = ImageSaver.create(user.getUserId(), (byte[]) stampData.get("picture"));
@@ -112,11 +95,26 @@ public class StampUploadServlet extends HttpServlet {
             }
         }).toArray();
     }
+    
+    private boolean isComplete(final Users user, int stampRallyId){
+        StampRallys stampRally = srm.read(stampRallyId);     
+        return stampRally.getStructurePads().stream().allMatch(new Predicate<StampPads>() {
+            @Override
+            public boolean test(final StampPads pad) {
+                for(Stamps myStamp : user.getStampsCollection()){
+                    if(pad.getStamptableId().equals(myStamp.getStampPads().getStamptableId())){
+                        return true;
+                    }
+                }
+                return false;
+            }
+        });
+    }
 
     private List<Map<String, Object>> a(){
         List<Map<String, Object>> list = new ArrayList<>();
         Map<String, Object> stamp = new HashMap<>();
-        stamp.put("stampId", 1);
+        stamp.put("stampId", 24);
         stamp.put("stampRallyId", 1);
         stamp.put("latitude", 0);
         stamp.put("latitude", 0);
@@ -124,7 +122,7 @@ public class StampUploadServlet extends HttpServlet {
         stamp.put("note", "ノート１");
         stamp.put("picture", new byte[0]);
         stamp.put("createDate", System.currentTimeMillis());
-        list.add(stamp);
+        list.add(stamp);        
         return list;
     }
     

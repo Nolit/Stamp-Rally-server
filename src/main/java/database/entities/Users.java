@@ -18,6 +18,7 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -161,7 +162,7 @@ public class Users implements Serializable {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId")
     private Collection<StampPads> myStampCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId")
-    private Collection<Stamps> clearStampCollection;
+    private List<Stamps> clearStampCollection;
 
     public Users() {
     }
@@ -436,11 +437,11 @@ public class Users implements Serializable {
     }
 
     @XmlTransient
-    public Collection<Stamps> getStampsCollection() {
+    public List<Stamps> getStampsCollection() {
         return clearStampCollection;
     }
 
-    public void setStampsCollection(Collection<Stamps> stampsCollection) {
+    public void setStampsCollection(List<Stamps> stampsCollection) {
         this.clearStampCollection = stampsCollection;
     }
 
