@@ -70,7 +70,7 @@ public class StampPads implements Serializable {
     @JoinColumn(name = "user_id", referencedColumnName = "user_id")
     @ManyToOne(optional = false)
     private Users userId;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "stamptableId")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "stampPads")
     private Collection<Stamps> stampsCollection;
 
     public StampPads() {

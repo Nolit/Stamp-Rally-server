@@ -15,10 +15,12 @@ import database.entities.Reports;
 import database.entities.Friends;
 import database.entities.FriendRequests;
 import database.entities.Activities;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
-import java.util.Map;
+import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -41,7 +43,6 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
-import utilities.ImageSaver;
 
 /**
  *
@@ -164,7 +165,7 @@ public class Users implements Serializable {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId")
     private Collection<StampPads> myStampCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId")
-    private Collection<Stamps> clearStampCollection;
+    private List<Stamps> clearStampCollection;
 
     public Users() {
     }
@@ -439,11 +440,11 @@ public class Users implements Serializable {
     }
 
     @XmlTransient
-    public Collection<Stamps> getStampsCollection() {
+    public List<Stamps> getStampsCollection() {
         return clearStampCollection;
     }
 
-    public void setStampsCollection(Collection<Stamps> stampsCollection) {
+    public void setStampsCollection(List<Stamps> stampsCollection) {
         this.clearStampCollection = stampsCollection;
     }
 
