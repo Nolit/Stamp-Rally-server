@@ -57,7 +57,12 @@ public class SearchServlet extends HttpServlet {
     
         try (PrintWriter out = response.getWriter()) {
             for(StampRallys s : stampRally){
-                out.println(s.getStamprallyName());
+                if(s.getStamrallyComment().length()<20)
+                {
+                out.println(s.getStamprallyName() + " " + s.getStamrallyComment() + " " + s.getStampThumbnail() + " " + s.getUsersList().get(0).getUserName());
+                }else{
+                out.println(s.getStamprallyName() + " " + s.getStamrallyComment().substring(0, 20) + " " + s.getStampThumbnail() + " " + s.getUsersList().get(0).getUserName());
+                }
             }
         }
     }

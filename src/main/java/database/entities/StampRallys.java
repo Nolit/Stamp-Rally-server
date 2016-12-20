@@ -10,9 +10,11 @@ import database.entities.Questions;
 import database.entities.RallyCompleteUsers;
 import database.entities.Reports;
 import database.entities.Activities;
+import database.entities.Users;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -99,7 +101,7 @@ public class StampRallys implements Serializable {
         @JoinColumn(name = "stamprally_id", referencedColumnName = "stamprally_id")}, inverseJoinColumns = {
         @JoinColumn(name = "user_id", referencedColumnName = "user_id")})
     @ManyToMany
-    private Collection<Users> usersCollection;
+    private List<Users> usersCollection;
     @ManyToMany(mappedBy = "stampRallysCollection1")
     private Collection<Stamps> stampsCollection1;
     @OneToMany(mappedBy = "stamprally")
@@ -209,11 +211,11 @@ public class StampRallys implements Serializable {
     }
 
     @XmlTransient
-    public Collection<Users> getUsersCollection() {
+    public List<Users> getUsersList() {
         return usersCollection;
     }
 
-    public void setUsersCollection(Collection<Users> usersCollection) {
+    public void setUsersList(List<Users> usersCollection) {
         this.usersCollection = usersCollection;
     }
 

@@ -1,6 +1,7 @@
 package database.managers;
 
 import database.entities.StampRallys;
+import database.entities.Users;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.Stateless;
@@ -34,4 +35,5 @@ public class StampRallyManager {
         .setParameter("keyword", "%" + searchword + "%")
         .getResultList();
     }
+    
 }
