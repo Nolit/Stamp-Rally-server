@@ -69,16 +69,13 @@ public class Stamps implements Serializable {
     @Size(min = 1, max = 65535)
     @Column(name = "stamp_name")
     private String stampName;
-    @Basic(optional = false)
-    @NotNull
-    @Lob
-    @Size(min = 1, max = 65535)
+    @Basic(optional = true)
     @Column(name = "stamp_comment")
     private String stampComment;
     @Basic(optional = false)
     @NotNull
     @Column(name = "stamp_date")
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date stampDate;
     @ManyToMany(mappedBy = "structurePads")
     private Collection<StampRallys> stampRallysCollection;

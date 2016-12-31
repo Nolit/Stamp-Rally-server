@@ -9,8 +9,12 @@ import database.managers.StampManager;
 import database.managers.StampPadsManager;
 import database.managers.StampRallyManager;
 import database.managers.UserManager;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.ObjectOutput;
+import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -19,6 +23,8 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.IntFunction;
 import java.util.function.Predicate;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
@@ -26,6 +32,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.apache.commons.codec.binary.Base64;
 import utilities.ImageSaver;
 
 @WebServlet(name = "StampUploadServlet", urlPatterns = {"/stampUpload"})
@@ -41,14 +48,15 @@ public class StampUploadServlet extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String email = request.getParameter("email");
+        String mailAddress = request.getParameter("mailAddress");
         String password = request.getParameter("password");
-        final Users user = um.readByEmailAndPassword(email, password);
+
+        final Users user = um.readByEmailAndPassword(mailAddress, password);
         if(user == null){
             return;
         }
-        
-        List<Map<String, Object>> stampList = new ObjectMapper().readValue(request.getParameter("stampList"), List.class);
+        String stampListJson = new String(request.getParameter("stampList").getBytes("ISO_8859_1"), "UTF-8");
+        List<Map<String, Object>> stampList = new ObjectMapper().readValue(stampListJson, List.class);
 //        List<Map<String, Object>> stampList = a();
         saveStamp(stampList, user);
         
@@ -61,7 +69,7 @@ public class StampUploadServlet extends HttpServlet {
     
     private void saveStamp(List<Map<String, Object>> stampList, Users user){
         for(Map<String, Object> stampData : stampList){
-            int stampId = (int)stampData.get("stampId");
+            int stampId = (int)stampData.getOrDefault("stampId", 0);
             StampPads pad;
             if(stampId == 0){
                 pad = new StampPads(stampData);
@@ -70,11 +78,14 @@ public class StampUploadServlet extends HttpServlet {
                 pad = sm.read(stampId).getStampPads();
             }
             
+            byte[] picture = Base64.decodeBase64((String) stampData.get("picture"));
+            String picturePath = ImageSaver.create(user.getUserId(), picture);
+            
             Stamps myStamp = new Stamps(stampData);
             myStamp.setStampPads(pad);
             myStamp.setUserId(user);
-            String picturePath = ImageSaver.create(user.getUserId(), (byte[]) stampData.get("picture"));
             myStamp.setPicturePass(picturePath);
+            
             sm.create(myStamp);
         }
     }

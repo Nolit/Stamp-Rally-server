@@ -57,15 +57,15 @@ public class StampPads implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Column(name = "latitude")
-    private float latitude;
+    private double latitude;
     @Basic(optional = false)
     @NotNull
     @Column(name = "longitude")
-    private float longitude;
+    private double longitude;
     @Basic(optional = false)
     @NotNull
     @Column(name = "stampcreate_date")
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date stampcreateDate;
     @JoinColumn(name = "user_id", referencedColumnName = "user_id")
     @ManyToOne(optional = false)
@@ -78,8 +78,8 @@ public class StampPads implements Serializable {
     
     public StampPads(Map<String, Object> stampData) {
         this.stampAddress = "default";
-        latitude = (long) stampData.get("latitude");
-        longitude = (long) stampData.get("longitude");
+        latitude = (double) stampData.get("latitude");
+        longitude = (double) stampData.get("longitude");
         stampcreateDate = new Date((long) stampData.get("createDate"));
     }
 
@@ -99,19 +99,19 @@ public class StampPads implements Serializable {
         this.stampAddress = stampAddress;
     }
 
-    public float getLatitude() {
+    public double getLatitude() {
         return latitude;
     }
 
-    public void setLatitude(float latitude) {
+    public void setLatitude(double latitude) {
         this.latitude = latitude;
     }
 
-    public float getLongitude() {
+    public double getLongitude() {
         return longitude;
     }
 
-    public void setLongitude(float longitude) {
+    public void setLongitude(double longitude) {
         this.longitude = longitude;
     }
 
