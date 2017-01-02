@@ -73,6 +73,7 @@ public class StampUploadServlet extends HttpServlet {
             StampPads pad;
             if(stampId == 0){
                 pad = new StampPads(stampData);
+                pad.setUserId(user);
                 spm.create(pad);
             }else{
                 pad = sm.read(stampId).getStampPads();

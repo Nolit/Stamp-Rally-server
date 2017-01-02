@@ -6,13 +6,17 @@
 package database.entities;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -45,8 +49,8 @@ public class StampPads implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @NotNull
     @Column(name = "stamptable_id")
     private Integer stamptableId;
     @Basic(optional = false)
@@ -71,13 +75,13 @@ public class StampPads implements Serializable {
     @ManyToOne(optional = false)
     private Users userId;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "stampPads")
-    private Collection<Stamps> stampsCollection;
+    private List<Stamps> stampsList = new ArrayList<>();
 
     public StampPads() {
     }
     
     public StampPads(Map<String, Object> stampData) {
-        this.stampAddress = "default";
+        stampAddress = "default";
         latitude = (double) stampData.get("latitude");
         longitude = (double) stampData.get("longitude");
         stampcreateDate = new Date((long) stampData.get("createDate"));
@@ -132,12 +136,12 @@ public class StampPads implements Serializable {
     }
 
     @XmlTransient
-    public Collection<Stamps> getStampsCollection() {
-        return stampsCollection;
+    public List<Stamps> getStampsList() {
+        return stampsList;
     }
 
-    public void setStampsCollection(Collection<Stamps> stampsCollection) {
-        this.stampsCollection = stampsCollection;
+    public void setStampsList(List<Stamps> stampsCollection) {
+        this.stampsList = stampsCollection;
     }
 
     @Override
