@@ -6,22 +6,12 @@
 package database.entities;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerator;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import database.entities.Reviews;
-import database.entities.Questions;
-import database.entities.RallyCompleteUsers;
-import database.entities.Reports;
-import database.entities.Activities;
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -103,7 +93,7 @@ public class StampRallys implements Serializable {
         @JoinColumn(name = "stamprally_id", referencedColumnName = "stamprally_id")}, inverseJoinColumns = {
         @JoinColumn(name = "stamp_id", referencedColumnName = "stamp_id")})
     @ManyToMany
-    private Collection<Stamps> structurePads;
+    private List<Stamps> stampsList;
     @JoinTable(name = "stamps_rally_creaters", joinColumns = {
         @JoinColumn(name = "stamprally_id", referencedColumnName = "stamprally_id")}, inverseJoinColumns = {
         @JoinColumn(name = "user_id", referencedColumnName = "user_id")})
@@ -211,10 +201,14 @@ public class StampRallys implements Serializable {
     @XmlTransient
     public List<StampPads> getStructurePads() {
         List<StampPads> stampPadsList = new ArrayList<>();
-        for(Stamps stamp : structurePads){
+        for(Stamps stamp : stampsList){
             stampPadsList.add(stamp.getStampPads());
         }
         return stampPadsList;
+    }
+    
+    public List<Stamps> getStampList(){
+        return stampsList;
     }
 
     @XmlTransient
