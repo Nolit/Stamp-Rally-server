@@ -94,6 +94,8 @@ public class Stamps implements Serializable {
     @JoinColumn(name = "stamptable_id", referencedColumnName = "stamptable_id")
     @ManyToOne(optional = false)
     private StampPads stampPads;
+    
+    private byte[] picture;
 
     public Stamps() {
     }
@@ -215,6 +217,14 @@ public class Stamps implements Serializable {
             return false;
         }
         return true;
+    }
+
+    public byte[] getPicture() {
+        return picture;
+    }
+
+    public void setPicture(byte[] picture) {
+        this.picture = picture;
     }
 
     @Override
