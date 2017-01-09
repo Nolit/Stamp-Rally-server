@@ -16,10 +16,12 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import database.entities.Stamps;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import utilities.ImageUtil;
 /**
  *
  * @author karin757
@@ -49,9 +51,12 @@ public class SampleServlet extends HttpServlet {
         //削除
 //        Sample sample = sm.read(2);
 //        sm.remove(sample);
-
-        List<Map<String, Object>> a = a();
-        String json = mapper.writeValueAsString(a);
+        byte[] image = ImageUtil.read("img/users/10/stamp/11.png");
+        Stamps stamp = new Stamps();
+        stamp.setPicture(image);
+        
+        String json = mapper.writeValueAsString(stamp);
+        
         try (PrintWriter out = response.getWriter()) {
             out.println(json);
         }
