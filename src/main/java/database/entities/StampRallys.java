@@ -215,6 +215,10 @@ public class StampRallys implements Serializable {
         return stampPadsList;
     }
     
+    public void setStampList(List<Stamps> stampList){
+        this.stampsList = stampList;
+    }
+    
     public List<Stamps> getStampList(){
         return stampsList;
     }

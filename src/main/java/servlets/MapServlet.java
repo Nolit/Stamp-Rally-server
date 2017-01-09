@@ -11,7 +11,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import database.entities.StampPads;
 import database.entities.Stamps;
+import java.util.ArrayList;
+import java.util.List;
 @WebServlet(name = "MapServlet", urlPatterns = {"/map"})
 public class MapServlet extends HttpServlet {
     @EJB
@@ -19,39 +22,38 @@ public class MapServlet extends HttpServlet {
     
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-//        response.setContentType("text/html;charset=UTF-8");
         response.setContentType("application/json;charset=UTF-8");
-        //新規作成
-//        sm.create(new Sample("name"));
 
         //読み込み
-        StampRallys stampRally = srm.read(1);
+        StampRallys stampRally = copy(srm.read(1));
         ObjectMapper mapper = new ObjectMapper();
         String json = mapper.writeValueAsString(stampRally);
-        
-//        StampRallys stampRally2 = new ObjectMapper().readValue(json, StampRallys.class);
-//        try (PrintWriter out = response.getWriter()) {
-//    
-//        for(Stamps i:stampRally.getStampsCollection()){
-//            out.println(i.getStampName());
-//        }
-//        
-//        }
-        
-        
-
-        //更新
-//        Sample sample = sm.read(2);
-//        sample.setName("updatedName");
-//        sm.update(sample);
-
-        //削除
-//        Sample sample = sm.read(2);
-//        sm.remove(sample);
 
         try (PrintWriter out = response.getWriter()) {
             out.println(json);
         }
+    }
+    
+    private StampRallys copy(StampRallys fromObj){
+        StampRallys toObj = new StampRallys();
+        toObj.setStamprallyId(fromObj.getStamprallyId());
+        toObj.setStamprallyName(fromObj.getStamprallyName());
+        toObj.setStamrallyComment(fromObj.getStamrallyComment());
+        List<Stamps> stampList = new ArrayList<>();
+        for(Stamps fromStamp : fromObj.getStampList()){
+            Stamps toStamp = new Stamps();
+            toStamp.setStampId(fromStamp.getStampId());
+            toStamp.setStampName(fromStamp.getStampName());
+            toStamp.setStampComment(fromStamp.getStampComment());
+            StampPads pad = new StampPads();
+            pad.setLatitude(fromStamp.getStampPads().getLatitude());
+            pad.setLongitude(fromStamp.getStampPads().getLongitude());
+            toStamp.setStampPads(pad);
+            stampList.add(toStamp);
+        }
+        toObj.setStampList(stampList);
+
+        return toObj;
     }
     
     @Override
