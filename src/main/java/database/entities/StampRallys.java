@@ -7,6 +7,12 @@ package database.entities;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import database.entities.Reviews;
+import database.entities.Questions;
+import database.entities.RallyCompleteUsers;
+import database.entities.Reports;
+import database.entities.Activities;
+import database.entities.Users;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -49,9 +55,10 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "StampRallys.findByStamprallyName", query = "SELECT s FROM StampRallys s WHERE s.stamprallyName = :stamprallyName")
     , @NamedQuery(name = "StampRallys.findByStamrallyComment", query = "SELECT s FROM StampRallys s WHERE s.stamrallyComment = :stamrallyComment")
     , @NamedQuery(name = "StampRallys.findByOfficialFlag", query = "SELECT s FROM StampRallys s WHERE s.officialFlag = :officialFlag")
-    , @NamedQuery(name = "StampRallys.findByCreateDate", query = "SELECT s FROM StampRallys s WHERE s.createDate = :createDate")})
-public class StampRallys implements Serializable {
+    , @NamedQuery(name = "StampRallys.findByCreateDate", query = "SELECT s FROM StampRallys s WHERE s.createDate = :createDate")
+    , @NamedQuery(name = "StampRallys.findBySearchKeyWord", query = "SELECT s FROM StampRallys s WHERE s.stamprallyName LIKE :keyword OR s.stamrallyComment LIKE :keyword")})
 
+public class StampRallys implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -98,9 +105,10 @@ public class StampRallys implements Serializable {
         @JoinColumn(name = "stamprally_id", referencedColumnName = "stamprally_id")}, inverseJoinColumns = {
         @JoinColumn(name = "user_id", referencedColumnName = "user_id")})
     @ManyToMany
-    private Collection<Users> usersCollection = new ArrayList<>();
+    private List<Users> usersCollection = new ArrayList<>();
     @ManyToMany(mappedBy = "stampRallysList")
     private Collection<Stamps> stampsCollection1 = new ArrayList<>();
+
     @OneToMany(mappedBy = "stamprally")
     private Collection<StampBookLikes> stampBookLikesCollection = new ArrayList<>();
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "stampRallys")
@@ -212,11 +220,11 @@ public class StampRallys implements Serializable {
     }
 
     @XmlTransient
-    public Collection<Users> getUsersCollection() {
+    public List<Users> getUsersList() {
         return usersCollection;
     }
 
-    public void setUsersCollection(Collection<Users> usersCollection) {
+    public void setUsersList(List<Users> usersCollection) {
         this.usersCollection = usersCollection;
     }
 

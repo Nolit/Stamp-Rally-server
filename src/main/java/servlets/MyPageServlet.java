@@ -49,7 +49,6 @@ public class MyPageServlet extends HttpServlet {
         ObjectMapper mapper = new ObjectMapper();
         mapper.addMixInAnnotations(Users.class, MyPageServlet.OgoriView.class);
         String json = mapper.writeValueAsString(user);
-
         //更新
 //        Sample sample = sm.read(2);
 //        sample.setName("updatedName");
