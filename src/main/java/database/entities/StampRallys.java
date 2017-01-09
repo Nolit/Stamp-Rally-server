@@ -88,33 +88,33 @@ public class StampRallys implements Serializable {
     @Temporal(TemporalType.DATE)
     private Date createDate;
     @ManyToMany(mappedBy = "stampRallysCollection")
-    private Collection<Tags> tagsCollection;
+    private Collection<Tags> tagsCollection = new ArrayList<>();
     @JoinTable(name = "stamps_rally_structures", joinColumns = {
         @JoinColumn(name = "stamprally_id", referencedColumnName = "stamprally_id")}, inverseJoinColumns = {
         @JoinColumn(name = "stamp_id", referencedColumnName = "stamp_id")})
     @ManyToMany
-    private List<Stamps> stampsList;
+    private List<Stamps> stampsList = new ArrayList<>();
     @JoinTable(name = "stamps_rally_creaters", joinColumns = {
         @JoinColumn(name = "stamprally_id", referencedColumnName = "stamprally_id")}, inverseJoinColumns = {
         @JoinColumn(name = "user_id", referencedColumnName = "user_id")})
     @ManyToMany
-    private Collection<Users> usersCollection;
+    private Collection<Users> usersCollection = new ArrayList<>();
     @ManyToMany(mappedBy = "stampRallysList")
-    private Collection<Stamps> stampsCollection1;
+    private Collection<Stamps> stampsCollection1 = new ArrayList<>();
     @OneToMany(mappedBy = "stamprally")
-    private Collection<StampBookLikes> stampBookLikesCollection;
+    private Collection<StampBookLikes> stampBookLikesCollection = new ArrayList<>();
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "stampRallys")
-    private Collection<RallyCompleteUsers> rallyCompleteUsersCollection;
+    private Collection<RallyCompleteUsers> rallyCompleteUsersCollection = new ArrayList<>();
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "stamprallyId")
-    private Collection<Reports> reportsCollection;
+    private Collection<Reports> reportsCollection = new ArrayList<>();
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "stamprallyId")
-    private Collection<Questions> questionsCollection;
+    private Collection<Questions> questionsCollection = new ArrayList<>();
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "stamprallyId")
-    private Collection<Users> usersCollection1;
+    private Collection<Users> usersCollection1 = new ArrayList<>();
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "stampRallys")
-    private Collection<Reviews> reviewsCollection;
+    private Collection<Reviews> reviewsCollection = new ArrayList<>();
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "stamprallyId")
-    private Collection<Activities> activitiesCollection;
+    private Collection<Activities> activitiesCollection = new ArrayList<>();
 
     public StampRallys() {
     }

@@ -81,16 +81,16 @@ public class Stamps implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date stampDate;
     @ManyToMany(mappedBy = "stampsList")
-    private Collection<StampRallys> stampRallysCollection;
+    private Collection<StampRallys> stampRallysCollection = new ArrayList<>();
     @JoinTable(name = "stamp_get_destinations", joinColumns = {
         @JoinColumn(name = "stamp_id", referencedColumnName = "stamp_id")}, inverseJoinColumns = {
         @JoinColumn(name = "stamprally_id", referencedColumnName = "stamprally_id")})
     @ManyToMany
     private List<StampRallys> stampRallysList = new ArrayList<>();
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "stampId")
-    private Collection<Reports> reportsCollection;
+    private Collection<Reports> reportsCollection = new ArrayList<>();
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "stampId")
-    private Collection<Activities> activitiesCollection;
+    private Collection<Activities> activitiesCollection = new ArrayList<>();
     @JoinColumn(name = "user_id", referencedColumnName = "user_id")
     @ManyToOne(optional = false)
     private Users userId;
