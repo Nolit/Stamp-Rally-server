@@ -10,8 +10,10 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import database.entities.Reports;
 import database.entities.Activities;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
@@ -35,7 +37,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
-import utilities.ImageSaver;
+import utilities.ImageUtil;
 
 /**
  *
@@ -83,7 +85,7 @@ public class Stamps implements Serializable {
         @JoinColumn(name = "stamp_id", referencedColumnName = "stamp_id")}, inverseJoinColumns = {
         @JoinColumn(name = "stamprally_id", referencedColumnName = "stamprally_id")})
     @ManyToMany
-    private Collection<StampRallys> stampRallysCollection1;
+    private List<StampRallys> stampRallysList = new ArrayList<>();
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "stampId")
     private Collection<Reports> reportsCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "stampId")
@@ -157,12 +159,8 @@ public class Stamps implements Serializable {
     }
 
     @XmlTransient
-    public Collection<StampRallys> getStampRallysCollection1() {
-        return stampRallysCollection1;
-    }
-
-    public void setStampRallysCollection1(Collection<StampRallys> stampRallysCollection1) {
-        this.stampRallysCollection1 = stampRallysCollection1;
+    public List<StampRallys> getStampRallysList() {
+        return stampRallysList;
     }
 
     @XmlTransient

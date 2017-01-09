@@ -33,7 +33,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.codec.binary.Base64;
-import utilities.ImageSaver;
+import utilities.ImageUtil;
 
 @WebServlet(name = "StampUploadServlet", urlPatterns = {"/stampUpload"})
 public class StampUploadServlet extends HttpServlet {
@@ -80,7 +80,7 @@ public class StampUploadServlet extends HttpServlet {
             }
             
             byte[] picture = Base64.decodeBase64((String) stampData.get("picture"));
-            String picturePath = ImageSaver.create(user.getUserId(), picture);
+            String picturePath = ImageUtil.create(user.getUserId(), picture);
             
             Stamps myStamp = new Stamps(stampData);
             myStamp.setStampPads(pad);
