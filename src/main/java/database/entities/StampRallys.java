@@ -99,7 +99,7 @@ public class StampRallys implements Serializable {
         @JoinColumn(name = "user_id", referencedColumnName = "user_id")})
     @ManyToMany
     private Collection<Users> usersCollection;
-    @ManyToMany(mappedBy = "stampRallysCollection1")
+    @ManyToMany(mappedBy = "stampRallysList")
     private Collection<Stamps> stampsCollection1;
     @OneToMany(mappedBy = "stamprally")
     private Collection<StampBookLikes> stampBookLikesCollection;

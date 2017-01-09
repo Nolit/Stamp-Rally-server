@@ -79,7 +79,7 @@ public class Stamps implements Serializable {
     @Column(name = "stamp_date")
     @Temporal(TemporalType.TIMESTAMP)
     private Date stampDate;
-    @ManyToMany(mappedBy = "structurePads")
+    @ManyToMany(mappedBy = "stampsList")
     private Collection<StampRallys> stampRallysCollection;
     @JoinTable(name = "stamp_get_destinations", joinColumns = {
         @JoinColumn(name = "stamp_id", referencedColumnName = "stamp_id")}, inverseJoinColumns = {
