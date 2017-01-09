@@ -61,9 +61,12 @@ public class StampUploadServlet extends HttpServlet {
         saveStamp(stampList, user);
         
         Object[] completedStampIds = extractCompletedAsId(stampList, user);
+        if(completedStampIds.length == 0){
+            return;
+        }
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-            out.println(new ObjectMapper().writer().writeValueAsString(completedStampIds));
+            out.print(new ObjectMapper().writer().writeValueAsString(true));
         }
     }
     

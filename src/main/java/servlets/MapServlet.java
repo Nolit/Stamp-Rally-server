@@ -25,7 +25,7 @@ public class MapServlet extends HttpServlet {
         response.setContentType("application/json;charset=UTF-8");
 
         //読み込み
-        StampRallys stampRally = copy(srm.read(1));
+        StampRallys stampRally = copy(srm.read(2));
         ObjectMapper mapper = new ObjectMapper();
         String json = mapper.writeValueAsString(stampRally);
 
