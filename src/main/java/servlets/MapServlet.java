@@ -15,6 +15,7 @@ import database.entities.StampPads;
 import database.entities.Stamps;
 import java.util.ArrayList;
 import java.util.List;
+import utilities.ImageUtil;
 @WebServlet(name = "MapServlet", urlPatterns = {"/map"})
 public class MapServlet extends HttpServlet {
     @EJB
@@ -25,7 +26,7 @@ public class MapServlet extends HttpServlet {
         response.setContentType("application/json;charset=UTF-8");
 
         //読み込み
-        StampRallys stampRally = copy(srm.read(1));
+        StampRallys stampRally = copy(srm.read(4));
         ObjectMapper mapper = new ObjectMapper();
         String json = mapper.writeValueAsString(stampRally);
 
@@ -45,6 +46,10 @@ public class MapServlet extends HttpServlet {
             toStamp.setStampId(fromStamp.getStampId());
             toStamp.setStampName(fromStamp.getStampName());
             toStamp.setStampComment(fromStamp.getStampComment());
+            
+            byte[] image = ImageUtil.read(fromStamp.getPicturePass());
+            toStamp.setPicture(image);
+            
             StampPads pad = new StampPads();
             pad.setLatitude(fromStamp.getStampPads().getLatitude());
             pad.setLongitude(fromStamp.getStampPads().getLongitude());

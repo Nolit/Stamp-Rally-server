@@ -35,7 +35,7 @@ public class StampRallyDetailServlet extends HttpServlet {
 
         //読み込み
         ObjectMapper mapper = new ObjectMapper();
-        StampRallys stampRally = copy(srm.read(Integer.valueOf(stampRallyId)));
+        StampRallys stampRally = srm.read(Integer.valueOf(stampRallyId));
         String json = mapper.writeValueAsString(stampRally);
 
         //更新
