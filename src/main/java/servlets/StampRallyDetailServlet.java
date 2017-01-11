@@ -25,27 +25,35 @@ public class StampRallyDetailServlet extends HttpServlet {
     @EJB
     StampRallyManager srm;
     
+    String loginUserId;
+    String referenceUserId;
+    String stampRallyId;
+    
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("application/json;charset=UTF-8");
         
-        String loginUserId = request.getParameter("loginUserId");
-        String referenceUserId = request.getParameter("referenceUserId");
-        String stampRallyId = request.getParameter("stampRallyId");
-
+        loginUserId = request.getParameter("loginUserId");
+        referenceUserId = request.getParameter("referenceUserId");
+        stampRallyId = request.getParameter("stampRallyId");
+        
+        System.out.println("デバッグ:"+request.getParameter("loginUserId"));
+        System.out.println("デバッグ:"+request.getParameter("referenceUserId"));
+        System.out.println("デバッグ:"+request.getParameter("stampRallyId"));
+        
         //読み込み
         ObjectMapper mapper = new ObjectMapper();
-        StampRallys stampRally = srm.read(Integer.valueOf(stampRallyId));
+        StampRallys stampRally = copy(srm.read(Integer.parseInt(stampRallyId)));
         String json = mapper.writeValueAsString(stampRally);
+        
+        /* ここにスタンプラリー獲得先テーブルからreferenceUserIdとstampRallyIdで検索する
+           結果を下のcopyの中でtoStampに入れていく
+        */
 
         //更新
 //        Sample sample = sm.read(2);
 //        sample.setName("updatedName");
 //        sm.update(sample);
-
-        byte[] image = ImageUtil.read("img/users/10/stamp/11.png");
-        Stamps stamp = new Stamps();
-        stamp.setPicture(image);
         
         
         try (PrintWriter out = response.getWriter()) {
@@ -58,18 +66,27 @@ public class StampRallyDetailServlet extends HttpServlet {
         toObj.setStamprallyId(fromObj.getStamprallyId());
         toObj.setStamprallyName(fromObj.getStamprallyName());
         toObj.setStamrallyComment(fromObj.getStamrallyComment());
+        toObj.setUsersList(fromObj.getUsersList());
+       
         List<Stamps> stampList = new ArrayList<>();
         for(Stamps fromStamp : fromObj.getStampList()){
             Stamps toStamp = new Stamps();
             toStamp.setStampId(fromStamp.getStampId());
             toStamp.setStampName(fromStamp.getStampName());
             toStamp.setStampComment(fromStamp.getStampComment());
+
+            byte[] image = ImageUtil.read(fromStamp.getPicturePass());
+            toStamp.setPicture(image);
+
             StampPads pad = new StampPads();
             pad.setLatitude(fromStamp.getStampPads().getLatitude());
             pad.setLongitude(fromStamp.getStampPads().getLongitude());
             toStamp.setStampPads(pad);
             stampList.add(toStamp);
         }
+
+        
+        
         toObj.setStampList(stampList);
 
         return toObj;
