@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 import utilities.ImageUtil;
 @WebServlet(name = "MapServlet", urlPatterns = {"/map"})
-public class MapServlet extends HttpServlet {
+    public class MapServlet extends HttpServlet {
     @EJB
     StampRallyManager srm;
     

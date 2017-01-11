@@ -45,8 +45,7 @@ public class SearchStampRallyServlet extends HttpServlet {
         System.out.println("デバッグ:Search:"+request.getParameter("searchKey"));
         
         ObjectMapper mapper = new ObjectMapper();
-//        ArrayList<StampRallys> stampRallys = copy( srm.search(request.getParameter("searchKey")));
-        ArrayList<StampRallys> stampRallys = srm.search(request.getParameter("searchKey"));
+        List<StampRallys> stampRallys = copy(srm.search(request.getParameter("searchKey")));
         String json = mapper.writeValueAsString(stampRallys);
         
         
@@ -55,7 +54,7 @@ public class SearchStampRallyServlet extends HttpServlet {
         }
     }
     
-    private ArrayList<StampRallys> copy(ArrayList<StampRallys> fromObj){
+    private List<StampRallys> copy(List<StampRallys> fromObj){
         ArrayList<StampRallys> toObj = new ArrayList<StampRallys>();
         StampRallys stampRallys = new StampRallys();
         for(StampRallys fromStampRally : fromObj){
