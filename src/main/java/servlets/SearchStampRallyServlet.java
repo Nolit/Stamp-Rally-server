@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package servlets;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -36,37 +31,45 @@ import java.util.List;
 import java.util.Map;
 import org.omg.IOP.Encoding;
 import java.io.*;
-/**
- *
- * @author karin757
- */
-@WebServlet(name = "SearchServlet", urlPatterns = {"/search"})
-public class SearchServlet extends HttpServlet {
+import utilities.ImageUtil;
+
+@WebServlet(name = "SearchStampRallyServelet", urlPatterns = {"/SearchStampRally"})
+public class SearchStampRallyServlet extends HttpServlet {
     @EJB
     StampRallyManager srm;
 
-    
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("application/json;charset=UTF-8");
-
-            
-    String sr = request.getParameter("stamprally");
-    String decodesr = decodeString(sr);
-    List<StampRallys> stampRally = srm.search(decodesr);
-    
+        
+        System.out.println("デバッグ:Search:"+request.getParameter("searchKey"));
+        
+        ObjectMapper mapper = new ObjectMapper();
+//        ArrayList<StampRallys> stampRallys = copy( srm.search(request.getParameter("searchKey")));
+        ArrayList<StampRallys> stampRallys = srm.search(request.getParameter("searchKey"));
+        String json = mapper.writeValueAsString(stampRallys);
+        
+        
         try (PrintWriter out = response.getWriter()) {
-            for(StampRallys s : stampRally){
-                if(s.getStamrallyComment().length()<20)
-                {
-                out.println(s.getStamprallyName() + " " + s.getStamrallyComment() + " " + s.getStampThumbnail() + " " + s.getUsersList().get(0).getUserName());
-                }else{
-                out.println(s.getStamprallyName() + " " + s.getStamrallyComment().substring(0, 20) + " " + s.getStampThumbnail() + " " + s.getUsersList().get(0).getUserName());
-                }
-            }
+            out.println(json);
         }
     }
-        @Override
+    
+    private ArrayList<StampRallys> copy(ArrayList<StampRallys> fromObj){
+        ArrayList<StampRallys> toObj = new ArrayList<StampRallys>();
+        StampRallys stampRallys = new StampRallys();
+        for(StampRallys fromStampRally : fromObj){
+            stampRallys.setStamprallyId(fromStampRally.getStamprallyId());
+            stampRallys.setStampThumbnail(fromStampRally.getStampThumbnail());
+            stampRallys.setStamprallyName(fromStampRally.getStamprallyName());
+            stampRallys.setUsersList(fromStampRally.getUsersList());
+            
+            toObj.add(stampRallys);
+        }
+        return toObj;
+    }
+    
+    @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);

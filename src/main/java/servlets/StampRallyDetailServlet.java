@@ -46,8 +46,9 @@ public class StampRallyDetailServlet extends HttpServlet {
         StampRallys stampRally = copy(srm.read(Integer.parseInt(stampRallyId)));
         String json = mapper.writeValueAsString(stampRally);
         
-        /* ここにスタンプラリー獲得先テーブルからreferenceUserIdとstampRallyIdで検索する
-           結果を下のcopyの中でtoStampに入れていく
+        /* 
+            ここにスタンプラリー獲得先テーブルからreferenceUserIdとstampRallyIdで検索する
+            結果を下のcopyの中でtoStampに入れていく
         */
 
         //更新
@@ -84,9 +85,6 @@ public class StampRallyDetailServlet extends HttpServlet {
             toStamp.setStampPads(pad);
             stampList.add(toStamp);
         }
-
-        
-        
         toObj.setStampList(stampList);
 
         return toObj;

@@ -30,8 +30,8 @@ public class StampRallyManager {
         em.remove(deleteTarget);
     }
     
-    public List<StampRallys> search(String searchword){
-        return (List<StampRallys>) em.createNamedQuery("StampRallys.findBySearchKeyWord",StampRallys.class)
+    public ArrayList<StampRallys> search(String searchword){
+        return (ArrayList<StampRallys>) em.createNamedQuery("StampRallys.findBySearchKeyWord",StampRallys.class)
         .setParameter("keyword", "%" + searchword + "%")
         .getResultList();
     }
