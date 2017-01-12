@@ -20,46 +20,24 @@ import java.util.List;
 import java.util.Map;
 import utilities.ImageUtil;
 
-@WebServlet(name = "StampRallyDetailServlet", urlPatterns = {"/StampRallyDetail"})
-public class StampRallyDetailServlet extends HttpServlet {
+@WebServlet(name = "MyStampBookServlet", urlPatterns = {"/MyStampBook"})
+public class MyStampBookServlet extends HttpServlet {
     @EJB
     StampRallyManager srm;
-    
-    String loginUserId;
     String referenceUserId;
-    String stampRallyId;
     
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("application/json;charset=UTF-8");
         
-        loginUserId = request.getParameter("loginUserId");
         referenceUserId = request.getParameter("referenceUserId");
-        stampRallyId = request.getParameter("stampRallyId");
-        
-        System.out.println("デバッグ:StampRallyDetail:"+request.getParameter("loginUserId"));
-        System.out.println("デバッグ:StampRallyDetail:"+request.getParameter("referenceUserId"));
-        System.out.println("デバッグ:StampRallyDetail:"+request.getParameter("stampRallyId"));
+        System.out.println("デバッグ:MyStampBookServlet:"+referenceUserId);
 
         //読み込み
         ObjectMapper mapper = new ObjectMapper();
-        StampRallys stampRally = copy(srm.read(Integer.parseInt(stampRallyId)));
+        StampRallys stampRally = copy(srm.read(Integer.parseInt(referenceUserId)));
         String json = mapper.writeValueAsString(stampRally);
-        
-        /* 
-            ここにスタンプラリー獲得先テーブルからreferenceUserIdとstampRallyIdで検索する
-            結果を下のcopyの中でtoStampに入れていく
-        */
-        
-        
-        //更新
-        /*
-            遊ぶボタンが押された時にrally_complete_usersに値を追加する処理
-            getParameterのキーワードははまだ決めてない
-            もしかして別のファイルに書いたほうがいい処理？
-        */
-        
-        
+       
         try (PrintWriter out = response.getWriter()) {
             out.println(json);
         }
