@@ -1,6 +1,5 @@
 package servlets;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import database.entities.StampRallys;
 import database.managers.StampRallyManager;
 import java.io.IOException;
@@ -12,26 +11,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import database.entities.Activities;
-import database.entities.Admins;
-import database.entities.FriendRequests;
-import database.entities.Friends;
-import database.entities.Questions;
-import database.entities.RallyCompleteUsers;
-import database.entities.Reports;
-import database.entities.Reviews;
-import database.entities.StampBookLikes;
-import database.entities.StampPads;
-import database.entities.Stamps;
-import database.entities.Users;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import org.omg.IOP.Encoding;
 import java.io.*;
-import utilities.ImageUtil;
 
 @WebServlet(name = "SearchStampRallyServelet", urlPatterns = {"/SearchStampRally"})
 public class SearchStampRallyServlet extends HttpServlet {
@@ -45,17 +27,24 @@ public class SearchStampRallyServlet extends HttpServlet {
         System.out.println("デバッグ:Search:"+request.getParameter("searchKey"));
         
         ObjectMapper mapper = new ObjectMapper();
-        List<StampRallys> stampRallys = copy(srm.search(request.getParameter("searchKey")));
+        srm.search(request.getParameter("searchKey"));
+        List<StampRallys> stampRallys = srm.search(request.getParameter("searchKey"));
+//        List<StampRallys> hoge = srm.search(request.getParameter("searchKey"));
+        
+        if(stampRallys.size() < 1){
+            System.out.println("debug:search:検索結果:検索結果がありませんでした。");
+        }else{
+            System.out.println("debug:search:検索結果"+stampRallys.get(0).getStamprallyName());
+        }
+        
         String json = mapper.writeValueAsString(stampRallys);
-        
-        
         try (PrintWriter out = response.getWriter()) {
             out.println(json);
         }
     }
     
     private List<StampRallys> copy(List<StampRallys> fromObj){
-        ArrayList<StampRallys> toObj = new ArrayList<StampRallys>();
+        ArrayList<StampRallys> toObj = new ArrayList<>();
         StampRallys stampRallys = new StampRallys();
         for(StampRallys fromStampRally : fromObj){
             stampRallys.setStamprallyId(fromStampRally.getStamprallyId());
