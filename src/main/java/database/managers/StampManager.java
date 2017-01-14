@@ -1,20 +1,11 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package database.managers;
 
-import database.entities.StampPads;
 import database.entities.Stamps;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
-/**
- *
- * @author yaboo
- */
 @Stateless
 public class StampManager {
     @PersistenceContext
@@ -36,4 +27,14 @@ public class StampManager {
         Stamps deleteTarget = em.merge(stamp);
         em.remove(deleteTarget);
     }
+    
+    public List<Stamps> getMyStampBook(Integer referenceUserId){
+        return em.createNamedQuery("Stamps.findByReferenceUserId", Stamps.class)
+                .setParameter("userId", referenceUserId)
+                .getResultList();
+    }
+    
+//    public List<Stamps> getStampRallyAlbum(Integer stampRallyid, Integer referenceUserid){
+//        return em.createNamedQuery("Stamps.findByStampRallyIdAndReferenceUserId", .class)
+//    }
 }
