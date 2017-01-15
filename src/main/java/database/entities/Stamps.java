@@ -7,8 +7,6 @@ package database.entities;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import database.entities.Reports;
-import database.entities.Activities;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -38,7 +36,6 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
-import utilities.ImageUtil;
 
 /**
  *
@@ -52,6 +49,7 @@ import utilities.ImageUtil;
     @NamedQuery(name = "Stamps.findAll", query = "SELECT s FROM Stamps s")
     , @NamedQuery(name = "Stamps.findByStampId", query = "SELECT s FROM Stamps s WHERE s.stampId = :stampId")
     , @NamedQuery(name = "Stamps.findByStampDate", query = "SELECT s FROM Stamps s WHERE s.stampDate = :stampDate")
+    , @NamedQuery(name = "Stamps.findByReferenceUserId", query = "SELECT s FROM Stamps s WHERE s.userId.userId = :userId")
     , @NamedQuery(name = "Stamps.findByUserId", query = "SELECT s FROM Stamps s WHERE s.userId.userId = :userId")
 })
 public class Stamps implements Serializable {

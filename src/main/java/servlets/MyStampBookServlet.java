@@ -1,6 +1,6 @@
 package servlets;
 
-import database.managers.SampleManager;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.ejb.EJB;
@@ -10,65 +10,61 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import database.entities.StampPads;
-import database.entities.StampRallys;
+import com.fasterxml.jackson.databind.jsontype.impl.StdTypeResolverBuilder;
 import database.entities.Stamps;
-import database.managers.StampRallyManager;
+import database.managers.StampManager;
+import database.managers.UserManager;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.apache.commons.codec.binary.Base64;
 import utilities.ImageUtil;
 
 @WebServlet(name = "MyStampBookServlet", urlPatterns = {"/MyStampBook"})
 public class MyStampBookServlet extends HttpServlet {
     @EJB
-    StampRallyManager srm;
-    String referenceUserId;
+    StampManager sm;
+    @EJB
+    UserManager um;
+    int referenceUserId;
+    String referenceUserName;
     
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("application/json;charset=UTF-8");
         
-        referenceUserId = request.getParameter("referenceUserId");
-        System.out.println("デバッグ:MyStampBookServlet:"+referenceUserId);
+        referenceUserId = Integer.parseInt(request.getParameter("referenceUserId"));
+        System.out.println("デバッグ:MyStampBookServlet:referenceUserId:"+referenceUserId);
 
+        referenceUserName = um.read(referenceUserId).getUserName();
+        System.out.println("デバッグ:referenceUserName"+um.read(referenceUserId).getUserName());
+        
+        Map<String, Object> myStampBook = copy(sm.getMyStampBook(referenceUserId));
+        
         //読み込み
         ObjectMapper mapper = new ObjectMapper();
-        StampRallys stampRally = copy(srm.read(Integer.parseInt(referenceUserId)));
-        String json = mapper.writeValueAsString(stampRally);
-       
+        String json = mapper.writeValueAsString(myStampBook);
         try (PrintWriter out = response.getWriter()) {
             out.println(json);
         }
     }
     
-    private StampRallys copy(StampRallys fromObj){
-        StampRallys toObj = new StampRallys();
-        toObj.setStamprallyId(fromObj.getStamprallyId());
-        toObj.setStamprallyName(fromObj.getStamprallyName());
-        toObj.setStamrallyComment(fromObj.getStamrallyComment());
-        toObj.setUsersList(fromObj.getUsersList());
-       
-        List<Stamps> stampList = new ArrayList<>();
-        for(Stamps fromStamp : fromObj.getStampList()){
-            Stamps toStamp = new Stamps();
-            toStamp.setStampId(fromStamp.getStampId());
-            toStamp.setStampName(fromStamp.getStampName());
-            toStamp.setStampComment(fromStamp.getStampComment());
-
-            byte[] image = ImageUtil.read(fromStamp.getPicturePass());
-            toStamp.setPicture(image);
-
-            StampPads pad = new StampPads();
-            pad.setLatitude(fromStamp.getStampPads().getLatitude());
-            pad.setLongitude(fromStamp.getStampPads().getLongitude());
-            toStamp.setStampPads(pad);
-            stampList.add(toStamp);
+    private Map<String, Object> copy(List<Stamps> fromObj){
+        Map<String, Object> retStampMap = new HashMap<>();
+        ArrayList<Map<String, Object>> stamps = new ArrayList<>();
+        retStampMap.put("userName", referenceUserName);
+        for(Stamps i:fromObj){
+            Map<String, Object> stamp = new HashMap<>();
+            stamp.put("stampId", i.getStampId());
+            stamp.put("picture", Base64.encodeBase64(ImageUtil.read(i.getPicturePass())));
+            stamp.put("stampName", i.getStampName());
+            stamp.put("stampDate", i.getStampDate().toString());
+            stamp.put("stampRallyName", i.getStampRallysList().get(0).getStamprallyName());
+            stamps.add(stamp);
         }
-        toObj.setStampList(stampList);
-
-        return toObj;
+        retStampMap.put("Stamps", stamps);
+        return retStampMap;
     }
     
     @Override
@@ -87,22 +83,4 @@ public class MyStampBookServlet extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
-
-    private List<Map<String, Object>> a(){
-        List<Map<String, Object>> list = new ArrayList<>();
-        Map<String, Object> stamp = new HashMap<>();
-        stamp.put("stampId", 1);
-        stamp.put("stampRallyId", 1);
-        stamp.put("latitude", 0);
-        stamp.put("latitude", 0);
-        stamp.put("title", "タイトル1");
-        stamp.put("note", "ノート１");
-        stamp.put("picture", "");
-        stamp.put("title", 1);
-        stamp.put("note", 1);
-        stamp.put("picture", 1);
-        stamp.put("picture", System.currentTimeMillis());
-        list.add(stamp);
-        return list;
-    }
 }
