@@ -32,6 +32,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
 import org.apache.commons.codec.binary.Base64;
 import utilities.ImageUtil;
 
@@ -51,19 +53,23 @@ public class StampUploadServlet extends HttpServlet {
         String mailAddress = request.getParameter("mailAddress");
         String password = request.getParameter("password");
 
-        final Users user = um.readByEmailAndPassword(mailAddress, password);
+        Users user = um.readByEmailAndPassword(mailAddress, password);
         if(user == null){
             return;
         }
+
         String stampListJson = new String(request.getParameter("stampList").getBytes("ISO_8859_1"), "UTF-8");
         List<Map<String, Object>> stampList = new ObjectMapper().readValue(stampListJson, List.class);
 //        List<Map<String, Object>> stampList = a();
         saveStamp(stampList, user);
-        
         Object[] completedStampIds = extractCompletedAsId(stampList, user);
+        if(completedStampIds.length == 0){
+            return;
+        }
+        System.out.println("クリア!");
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-            out.println(new ObjectMapper().writer().writeValueAsString(completedStampIds));
+            out.print(new ObjectMapper().writer().writeValueAsString(true));
         }
     }
     
@@ -88,6 +94,7 @@ public class StampUploadServlet extends HttpServlet {
             myStamp.setPicturePass(picturePath);
             
             sm.create(myStamp);
+//            sm.flash();
         }
     }
     
@@ -107,13 +114,14 @@ public class StampUploadServlet extends HttpServlet {
             }
         }).toArray();
     }
-    
+
     private boolean isComplete(final Users user, int stampRallyId){
-        StampRallys stampRally = srm.read(stampRallyId);     
+        StampRallys stampRally = srm.read(stampRallyId);
+        final List<Stamps> myStamps = sm.findByUserId(user.getUserId());
         return stampRally.getStructurePads().stream().allMatch(new Predicate<StampPads>() {
             @Override
             public boolean test(final StampPads pad) {
-                for(Stamps myStamp : user.getStampsCollection()){
+                for(Stamps myStamp : myStamps){
                     if(pad.getStamptableId().equals(myStamp.getStampPads().getStamptableId())){
                         return true;
                     }
@@ -122,6 +130,24 @@ public class StampUploadServlet extends HttpServlet {
             }
         });
     }
+   
+//    private boolean isComplete(final Users user, int stampRallyId){
+//        System.out.println("check stampRallyId : " + stampRallyId);
+//        StampRallys stampRally = srm.read(stampRallyId);
+//        return stampRally.getStructurePads().stream().allMatch(new Predicate<StampPads>() {
+//            @Override
+//            public boolean test(final StampPads pad) {
+//                System.out.println("check pad : " + pad.getStamptableId());
+//                for(Stamps myStamp : user.getStampsCollection()){
+//                    System.out.println("my stamp : " + myStamp.getStampPads().getStamptableId());
+//                    if(pad.getStamptableId().equals(myStamp.getStampPads().getStamptableId())){
+//                        return true;
+//                    }
+//                }
+//                return false;
+//            }
+//        });
+//    }
 
     private List<Map<String, Object>> a(){
         List<Map<String, Object>> list = new ArrayList<>();
