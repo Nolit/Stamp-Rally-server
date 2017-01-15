@@ -51,7 +51,9 @@ import utilities.ImageUtil;
 @NamedQueries({
     @NamedQuery(name = "Stamps.findAll", query = "SELECT s FROM Stamps s")
     , @NamedQuery(name = "Stamps.findByStampId", query = "SELECT s FROM Stamps s WHERE s.stampId = :stampId")
-    , @NamedQuery(name = "Stamps.findByStampDate", query = "SELECT s FROM Stamps s WHERE s.stampDate = :stampDate")})
+    , @NamedQuery(name = "Stamps.findByStampDate", query = "SELECT s FROM Stamps s WHERE s.stampDate = :stampDate")
+    , @NamedQuery(name = "Stamps.findByUserId", query = "SELECT s FROM Stamps s WHERE s.userId.userId = :userId")
+})
 public class Stamps implements Serializable {
 
     private static final long serialVersionUID = 1L;

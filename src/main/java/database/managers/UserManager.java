@@ -19,8 +19,8 @@ public class UserManager {
        return em.find(Users.class, user_id);
     }
     
-    public void update(Users user){
-        em.merge(user);
+    public Users update(Users user){
+        return em.merge(user);
     }
     
     public Users readByEmailAndPassword(String email, String password){
@@ -38,5 +38,13 @@ public class UserManager {
           .getResultList();
         boolean b = a.size()>0;
         return b;
+    }
+    
+    public void refresh(Users user){
+        em.refresh(user);
+    }
+    
+    public void close(){
+        em.close();
     }
 }
