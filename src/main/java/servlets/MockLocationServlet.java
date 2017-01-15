@@ -22,8 +22,13 @@ public class MockLocationServlet extends HttpServlet {
     
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
         throws ServletException, IOException {
+        
+        if(request.getParameter("isClear") != null){
+            LocationObserver.observer.clear();
+            return;
+        }
+        
         response.setHeader("Access-Control-Allow-Origin", "*");
-        response.getWriter().print("<h1>Result</h1>");
         try{
             double latitude = Double.valueOf(request.getParameter("latitude"));
             double longitude = Double.valueOf(request.getParameter("longitude"));

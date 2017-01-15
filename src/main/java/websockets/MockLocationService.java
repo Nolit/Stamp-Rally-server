@@ -21,7 +21,7 @@ import utilities.LocationObserver;
  */
 @ServerEndpoint("/location")
 public class MockLocationService {
-    static Set<Session> sessions = Collections.synchronizedSet(new HashSet<Session>());
+    public static Set<Session> sessions = Collections.synchronizedSet(new HashSet<Session>());
     
     public MockLocationService(){
         LocationObserver.observer.add(this);
@@ -36,7 +36,6 @@ public class MockLocationService {
     
     @OnOpen
     public void open(Session sess){
-        System.out.println("open");
         sessions.add(sess);
     }
     @OnClose

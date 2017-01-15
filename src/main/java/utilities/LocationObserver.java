@@ -7,6 +7,7 @@ package utilities;
 
 import java.util.ArrayList;
 import java.util.List;
+import javax.websocket.Session;
 import websockets.MockLocationService;
 
 /**
@@ -27,5 +28,15 @@ public class LocationObserver {
         for(MockLocationService service : list){
             service.sendLocation(latitude, longitude);
         }
+    }
+    
+    public void clear(){
+        System.out.println("clear");
+        for(Session session : MockLocationService.sessions){
+            for(MockLocationService service : list){
+                service.close(session);
+            }
+        }
+        list.clear();
     }
 }
