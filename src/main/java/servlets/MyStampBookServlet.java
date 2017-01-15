@@ -1,6 +1,5 @@
 package servlets;
 
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.ejb.EJB;
@@ -10,17 +9,12 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.jsontype.impl.StdTypeResolverBuilder;
 import data.StampData;
 import database.entities.Stamps;
 import database.managers.StampManager;
 import database.managers.UserManager;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import org.apache.commons.codec.binary.Base64;
 import utilities.ImageUtil;
 
 @WebServlet(name = "MyStampBookServlet", urlPatterns = {"/MyStampBook"})
@@ -31,6 +25,7 @@ public class MyStampBookServlet extends HttpServlet {
     UserManager um;
     int referenceUserId;
     String referenceUserName;
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy年MM月dd日");
     
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -61,7 +56,7 @@ public class MyStampBookServlet extends HttpServlet {
             data.setStampId(i.getStampId());
             data.setPicture(ImageUtil.read(i.getPicturePass()));
             data.setStampName(i.getStampName());
-            data.setStampDate(new SimpleDateFormat("yyyy年MM月dd日hh時mm分").format(i.getStampDate()));
+            data.setStampDate(sdf.format(i.getStampDate()));
             data.setStampRallyName(i.getStampRallysList().get(0).getStamprallyName());
             stampDataSet[index] = data;
         }
