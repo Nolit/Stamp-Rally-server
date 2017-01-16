@@ -44,8 +44,8 @@ public class StampRallyManager {
        return em.find(StampRallys.class, id);
     }
     
-    public void update(StampRallys stampRally){
-        em.merge(stampRally);
+    public StampRallys update(StampRallys stampRally){
+        return em.merge(stampRally);
     }
     
     public void remove(StampRallys stampRally){

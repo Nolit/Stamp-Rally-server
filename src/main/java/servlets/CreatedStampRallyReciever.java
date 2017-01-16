@@ -79,17 +79,8 @@ public class CreatedStampRallyReciever extends HttpServlet {
         for(Integer id : selectedStampIdList){
             stampRally.getStampList().add(sm.read(id));
         }
-        try{
-            srm.create(stampRally);
-            srm.clearStampRally(stampRally, user);
-        }catch(ConstraintViolationException ex){
-            if (ex instanceof javax.validation.ConstraintViolationException) {
-                ConstraintViolationException cve = (ConstraintViolationException) ex;
-                for (ConstraintViolation cv : cve.getConstraintViolations()) {
-                  System.out.println("CONSTRAINT VIOLOATION : " + cv.toString());
-                }
-            }
-        }
+        srm.create(stampRally);
+        srm.clearStampRally(stampRally, user);
         
         try (PrintWriter out = response.getWriter()) {
             out.print(true);
