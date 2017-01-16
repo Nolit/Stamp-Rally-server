@@ -31,7 +31,7 @@ public class SearchStampRallyServlet extends HttpServlet {
         response.setContentType("application/json;charset=UTF-8");        
         System.out.println("デバッグ:Search:"+request.getParameter("searchKey"));
 
-        searchStampRallyList = copy(srm.search(request.getParameter("searchKey")));
+        searchStampRallyList = copy(srm.search(decodeString(request.getParameter("searchKey"))));
         
         if(searchStampRallyList.size() < 1){
             System.out.println("debug:search:検索結果:検索結果がありませんでした。");

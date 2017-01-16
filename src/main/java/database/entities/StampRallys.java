@@ -125,6 +125,8 @@ public class StampRallys implements Serializable {
     private Collection<Activities> activitiesCollection = new ArrayList<>();
 
     public StampRallys() {
+        officialFlag = false;
+        createDate = new Date();
     }
 
     public StampRallys(Integer stamprallyId) {
