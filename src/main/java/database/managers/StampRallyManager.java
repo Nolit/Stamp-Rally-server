@@ -2,11 +2,10 @@ package database.managers;
 
 import database.entities.RallyCompleteUsers;
 import database.entities.RallyCompleteUsersPK;
-import database.entities.StampRallys;
-import database.entities.Users;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
+import database.entities.StampRallys;
+import database.entities.Users;
 import java.util.List;
 import java.util.Set;
 import javax.ejb.Stateless;
@@ -64,6 +63,13 @@ public class StampRallyManager {
         completeUser.setAchieveDate(new Date());
         completeUser.setChallangeDate(new Date());
         em.persist(completeUser);
+    }
+    public RallyCompleteUsers getStampRallyCompleteUser(Integer achieverId, Integer stampRallyId){
+        List<RallyCompleteUsers> ret = em.createNamedQuery("RallyCompleteUsers.findByUserIdAndReferenceStamprallyId", RallyCompleteUsers.class)
+                .setParameter("achieverId", achieverId)
+                .setParameter("stamprallyId", stampRallyId)
+                .getResultList();
+            return ret.size() > 0 ? ret.get(0) : null;
     }
     
 }

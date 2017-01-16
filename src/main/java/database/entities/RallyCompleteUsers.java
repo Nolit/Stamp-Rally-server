@@ -1,12 +1,5 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package database.entities;
 
-import database.entities.StampRallys;
-import database.entities.Users;
 import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Basic;
@@ -23,10 +16,6 @@ import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
 
-/**
- *
- * @author b3314
- */
 @Entity
 @Table(name = "rally_complete_users")
 @XmlRootElement
@@ -35,7 +24,8 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "RallyCompleteUsers.findByAchieverId", query = "SELECT r FROM RallyCompleteUsers r WHERE r.rallyCompleteUsersPK.achieverId = :achieverId")
     , @NamedQuery(name = "RallyCompleteUsers.findByStamprallyId", query = "SELECT r FROM RallyCompleteUsers r WHERE r.rallyCompleteUsersPK.stamprallyId = :stamprallyId")
     , @NamedQuery(name = "RallyCompleteUsers.findByChallangeDate", query = "SELECT r FROM RallyCompleteUsers r WHERE r.challangeDate = :challangeDate")
-    , @NamedQuery(name = "RallyCompleteUsers.findByAchieveDate", query = "SELECT r FROM RallyCompleteUsers r WHERE r.achieveDate = :achieveDate")})
+    , @NamedQuery(name = "RallyCompleteUsers.findByAchieveDate", query = "SELECT r FROM RallyCompleteUsers r WHERE r.achieveDate = :achieveDate")
+    , @NamedQuery(name = "RallyCompleteUsers.findByUserIdAndReferenceStamprallyId", query = "SELECT r FROM RallyCompleteUsers r WHERE r.rallyCompleteUsersPK.achieverId = :achieverId AND r.rallyCompleteUsersPK.stamprallyId = :stamprallyId")})
 public class RallyCompleteUsers implements Serializable {
 
     private static final long serialVersionUID = 1L;
