@@ -27,13 +27,16 @@ public class LoginServlet extends HttpServlet {
         String mail = request.getParameter("mailAddress");
         String pass = request.getParameter("password");
         
-        boolean isLogin = um.login(mail,pass);
-        System.out.println("ユーザいる：" + isLogin);
+        System.out.println(mail+" : " + pass);
         
-        try (PrintWriter out = response.getWriter()) {
-            out.println(isLogin);
+        boolean isLogin = um.login(mail,pass);
+        Users user = um.readByEmailAndPassword(mail, pass);
+        if(isLogin){
+            int userId = user.getUserId();
+            try (PrintWriter out = response.getWriter()) {
+                out.println(userId);
+            }
         }
- 
     }
     
     @Override
