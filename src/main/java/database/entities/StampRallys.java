@@ -1,18 +1,7 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package database.entities;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import database.entities.Reviews;
-import database.entities.Questions;
-import database.entities.RallyCompleteUsers;
-import database.entities.Reports;
-import database.entities.Activities;
-import database.entities.Users;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;

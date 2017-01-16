@@ -1,8 +1,8 @@
 package database.managers;
 
+import database.entities.RallyCompleteUsers;
 import database.entities.StampRallys;
 import database.entities.Users;
-import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -34,6 +34,14 @@ public class StampRallyManager {
         return (List<StampRallys>) em.createNamedQuery("StampRallys.findBySearchKeyWord",StampRallys.class)
         .setParameter("keyword", "%" + searchword + "%")
         .getResultList();
+    }
+    
+    public RallyCompleteUsers getStampRallyCompleteUser(Integer achieverId, Integer stampRallyId){
+        List<RallyCompleteUsers> ret = em.createNamedQuery("RallyCompleteUsers.findByUserIdAndReferenceStamprallyId", RallyCompleteUsers.class)
+                .setParameter("achieverId", achieverId)
+                .setParameter("stamprallyId", stampRallyId)
+                .getResultList();
+            return ret.size() > 0 ? ret.get(0) : null;
     }
     
 }
