@@ -16,10 +16,8 @@ import database.entities.Stamps;
 import database.entities.Users;
 import database.managers.StampRallyManager;
 import database.managers.UserManager;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import utilities.ImageUtil;
 
 @WebServlet(name = "StampRallyDetailServlet", urlPatterns = {"/StampRallyDetail"})
 public class StampRallyDetailServlet extends HttpServlet {
@@ -48,7 +46,7 @@ public class StampRallyDetailServlet extends HttpServlet {
         Users user = um.read(referenceUserId);
         System.out.println("aaa"+user.getUserName());
         StampRallyDetailPageData pageData = getPageData(srm.read(stampRallyId), user);
-        StampData[] stampData = null;
+        StampData[] stampData = getStampData(um.read(referenceUserId).getStampsCollection());
         
         //Androidにレスポンスを送る
         ObjectMapper mapper = new ObjectMapper();
@@ -79,27 +77,18 @@ public class StampRallyDetailServlet extends HttpServlet {
         return retPageData;
     }
     
-    private StampData[] getStampData(ArrayList<Stamps> fromObj){
-          StampData[] retStampDataArray = new StampData[fromObj.size()];
-                  
-//        List<Stamps> stampList = new ArrayList<>();
-//        for(Stamps fromStamp : fromObj.getStampList()){
-//            Stamps toStamp = new Stamps();
-//            toStamp.setStampId(fromStamp.getStampId());
-//            toStamp.setStampName(fromStamp.getStampName());
-//            toStamp.setStampComment(fromStamp.getStampComment());
-//
-//            byte[] image = ImageUtil.read(fromStamp.getPicturePass());
-//            toStamp.setPicture(image);
-//
-//            StampPads pad = new StampPads();
-//            pad.setLatitude(fromStamp.getStampPads().getLatitude());
-//            pad.setLongitude(fromStamp.getStampPads().getLongitude());
-//            toStamp.setStampPads(pad);
-//            stampList.add(toStamp);
-//        }
-//        toObj.setStampList(stampList);
-        
+    private StampData[] getStampData(List<Stamps> fromObj){
+        StampData[] retStampDataArray = new StampData[fromObj.size()];
+        for(int i=0; i<fromObj.size(); i++){
+            StampData data = new StampData();
+            Stamps stamp = fromObj.get(i);
+            
+            data.setStampId(stamp.getStampId());
+            data.setStampName(stamp.getStampName());
+            data.setStampComment(stamp.getStampComment());
+            data.setPicture(ImageUtil.read(stamp.getPicturePass()));
+            retStampDataArray[i] = data;
+        }
         return retStampDataArray;
     }
     
@@ -119,22 +108,4 @@ public class StampRallyDetailServlet extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
-
-    private List<Map<String, Object>> a(){
-        List<Map<String, Object>> list = new ArrayList<>();
-        Map<String, Object> stamp = new HashMap<>();
-        stamp.put("stampId", 1);
-        stamp.put("stampRallyId", 1);
-        stamp.put("latitude", 0);
-        stamp.put("latitude", 0);
-        stamp.put("title", "タイトル1");
-        stamp.put("note", "ノート１");
-        stamp.put("picture", "");
-        stamp.put("title", 1);
-        stamp.put("note", 1);
-        stamp.put("picture", 1);
-        stamp.put("picture", System.currentTimeMillis());
-        list.add(stamp);
-        return list;
-    }
 }

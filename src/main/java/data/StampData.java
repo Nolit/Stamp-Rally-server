@@ -5,6 +5,7 @@ public class StampData {
     private String stampName;
     private String stampDate;
     private String stampRallyName;
+    private String stampComment;
     private Integer stampRallyReviewAveragePoint;
     private byte[] picture;
 
@@ -51,7 +52,17 @@ public class StampData {
     public Integer getStampRallyReviewAveragePoint() {
         return stampRallyReviewAveragePoint;
     }
+    
     public void setStampRallyReviewAveragePoint(Integer stampRallyReviewAveragePoint) {
         this.stampRallyReviewAveragePoint = stampRallyReviewAveragePoint;
     }
+    
+    public String getStampComment(){
+        return stampComment;
+    }
+    
+    public void setStampComment(String stampComment){
+        this.stampComment = stampComment;
+    }
+    
 }
