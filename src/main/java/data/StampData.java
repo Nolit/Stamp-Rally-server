@@ -1,19 +1,11 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package data;
 
-/**
- *
- * @author Nolit
- */
 public class StampData {
     private Integer stampId;
     private String stampName;
     private String stampDate;
     private String stampRallyName;
+    private Integer stampRallyReviewAveragePoint;
     private byte[] picture;
 
     public byte[] getPicture() {
@@ -54,5 +46,12 @@ public class StampData {
 
     public void setStampRallyName(String stampRallyName) {
         this.stampRallyName = stampRallyName;
+    }
+
+    public Integer getStampRallyReviewAveragePoint() {
+        return stampRallyReviewAveragePoint;
+    }
+    public void setStampRallyReviewAveragePoint(Integer stampRallyReviewAveragePoint) {
+        this.stampRallyReviewAveragePoint = stampRallyReviewAveragePoint;
     }
 }
