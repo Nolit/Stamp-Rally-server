@@ -11,11 +11,13 @@ import javax.servlet.http.HttpServletResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import data.StampData;
 import data.StampRallyDetailPageData;
+import database.entities.RallyCompleteUsers;
 import database.entities.StampRallys;
 import database.entities.Stamps;
 import database.entities.Users;
 import database.managers.StampRallyManager;
 import database.managers.UserManager;
+import java.text.SimpleDateFormat;
 import java.util.List;
 import utilities.ImageUtil;
 
@@ -30,6 +32,8 @@ public class StampRallyDetailServlet extends HttpServlet {
     Integer referenceUserId;
     Integer stampRallyId;
     
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy年MM月dd日");
+    
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("application/json;charset=UTF-8");
@@ -43,9 +47,7 @@ public class StampRallyDetailServlet extends HttpServlet {
         System.out.println("デバッグ:StampRallyDetail:"+request.getParameter("stampRallyId"));
 
         //データベース読み込み
-        Users user = um.read(referenceUserId);
-        System.out.println("aaa"+user.getUserName());
-        StampRallyDetailPageData pageData = getPageData(srm.read(stampRallyId), user);
+        StampRallyDetailPageData pageData = getPageData(um.read(referenceUserId), srm.read(stampRallyId));
         StampData[] stampData = getStampData(um.read(referenceUserId).getStampsCollection());
         
         //Androidにレスポンスを送る
@@ -58,22 +60,41 @@ public class StampRallyDetailServlet extends HttpServlet {
         }
     }
     
-    private StampRallyDetailPageData getPageData(StampRallys stampRally, Users referenceUser){
+    private StampRallyDetailPageData getPageData(Users referenceUser, StampRallys stampRally){
         StampRallyDetailPageData retPageData = new StampRallyDetailPageData();
         
         retPageData.setStampRallyId(stampRally.getStamprallyId());
         retPageData.setStampRallyTitle(stampRally.getStamprallyName());
         retPageData.setStampRallyComment(stampRally.getStamrallyComment());
         retPageData.setStampRallyCreatorsUserName(stampRally.getUsersList().get(0).getUserName());
-        
-        System.out.println(referenceUser.getUserName());
         retPageData.setReferenceUserName(referenceUser.getUserName());
+        
+        //レビューテーブル
 //        retPageData.setStampRallyReviewPoint();           //参照ユーザーの評価値（スタンプラリーに対する評価値）
 //        retPageData.setStampRallyReviewAveragePoint();    //スタンプラリーの平均評価地
         
-//        retPageData.setStampRallyChallengeDate();     //参照ユーザーのスタンプラリーIDに対する挑戦日時
-//        retPageData.setStampRallyCompleteDate();      //参照ユーザーのスタンプラリーIDに対するクリア日時
-
+        //コンプリートユーザーテーブル
+        RallyCompleteUsers RallyCompleteData = srm.getStampRallyCompleteUser(loginUserId, stampRally.getStamprallyId());
+        if(RallyCompleteData == null){
+            //挑戦したことがないユーザー
+            retPageData.setStampRallyChallengeDate(null);     //参照ユーザーのスタンプラリーIDに対する挑戦日時
+            retPageData.setStampRallyCompleteDate(null);
+            System.out.println("未挑戦:挑戦日時:" + retPageData.getStampRallyChallengeDate());
+            System.out.println("未挑戦:クリア日時:" + retPageData.getStampRallyCompleteDate());
+        }else if(RallyCompleteData.getAchieveDate() == null){
+            //挑戦したことがあるユーザー
+            retPageData.setStampRallyChallengeDate(sdf.format(RallyCompleteData.getChallangeDate()));     //参照ユーザーのスタンプラリーIDに対する挑戦日時
+            retPageData.setStampRallyCompleteDate(null);
+            System.out.println("挑戦済み:挑戦日時:" + retPageData.getStampRallyChallengeDate());
+            System.out.println("挑戦済み:クリア日時:" + retPageData.getStampRallyCompleteDate());
+        }else{
+            //コンプリートしているユーザー
+            retPageData.setStampRallyChallengeDate(sdf.format(RallyCompleteData.getAchieveDate()));      //参照ユーザーのスタンプラリーIDに対するクリア日時
+            retPageData.setStampRallyCompleteDate(sdf.format(RallyCompleteData.getChallangeDate()));     //参照ユーザーのスタンプラリーIDに対する挑戦日時
+            System.out.println("クリア済み:挑戦日時:" + retPageData.getStampRallyChallengeDate());
+            System.out.println("クリア済み:クリア日時:" + retPageData.getStampRallyCompleteDate());
+        }
+        
         return retPageData;
     }
     
