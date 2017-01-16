@@ -14,47 +14,50 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.ArrayList;
 import java.util.List;
 import java.io.*;
+import java.util.HashMap;
+import java.util.Map;
+import org.apache.commons.codec.binary.Base64;
+import utilities.ImageUtil;
 
 @WebServlet(name = "SearchStampRallyServelet", urlPatterns = {"/SearchStampRally"})
 public class SearchStampRallyServlet extends HttpServlet {
     @EJB
     StampRallyManager srm;
+    
+    List<Map<String,Object>> searchStampRallyList;
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("application/json;charset=UTF-8");
-        
+        response.setContentType("application/json;charset=UTF-8");        
         System.out.println("デバッグ:Search:"+request.getParameter("searchKey"));
+
+        searchStampRallyList = copy(srm.search(request.getParameter("searchKey")));
         
-        ObjectMapper mapper = new ObjectMapper();
-        srm.search(request.getParameter("searchKey"));
-        List<StampRallys> stampRallys = srm.search(request.getParameter("searchKey"));
-//        List<StampRallys> hoge = srm.search(request.getParameter("searchKey"));
-        
-        if(stampRallys.size() < 1){
+        if(searchStampRallyList.size() < 1){
             System.out.println("debug:search:検索結果:検索結果がありませんでした。");
         }else{
-            System.out.println("debug:search:検索結果"+stampRallys.get(0).getStamprallyName());
+            System.out.println("debug:search:検索結果"+searchStampRallyList.get(0).get("stampRallyTitle"));
         }
         
-        String json = mapper.writeValueAsString(stampRallys);
+        ObjectMapper mapper = new ObjectMapper();
+        String json = mapper.writeValueAsString(searchStampRallyList);
         try (PrintWriter out = response.getWriter()) {
             out.println(json);
         }
     }
     
-    private List<StampRallys> copy(List<StampRallys> fromObj){
-        ArrayList<StampRallys> toObj = new ArrayList<>();
-        StampRallys stampRallys = new StampRallys();
-        for(StampRallys fromStampRally : fromObj){
-            stampRallys.setStamprallyId(fromStampRally.getStamprallyId());
-            stampRallys.setStampThumbnail(fromStampRally.getStampThumbnail());
-            stampRallys.setStamprallyName(fromStampRally.getStamprallyName());
-            stampRallys.setUsersList(fromStampRally.getUsersList());
-            
-            toObj.add(stampRallys);
+    private List<Map<String,Object>> copy(List<StampRallys> fromObj){
+        List<Map<String,Object>> ret = new ArrayList<>() ;
+        Map<String,Object> make = new HashMap<>();
+        for(StampRallys index : fromObj){
+            make.put("stampRallyId", index.getStamprallyId());
+            make.put("stampRallyThumbnail", Base64.encodeBase64(ImageUtil.read(index.getStampThumbnail())));
+            make.put("stampRallyTitle", index.getStamprallyName());
+            make.put("stampRallyCreatorUserName", index.getUsersList().get(0).getUserName());
+            make.put("stampRallyCreatorUserId", index.getUsersList().get(0).getUserId());
+            ret.add(make);
         }
-        return toObj;
+        return ret;
     }
     
     @Override
