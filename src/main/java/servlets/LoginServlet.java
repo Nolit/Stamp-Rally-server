@@ -31,12 +31,19 @@ public class LoginServlet extends HttpServlet {
         
         boolean isLogin = um.login(mail,pass);
         Users user = um.readByEmailAndPassword(mail, pass);
+        
+        int userId = 0;
         if(isLogin){
-            int userId = user.getUserId();
+            userId = user.getUserId();
+            try (PrintWriter out = response.getWriter()) {
+                out.println(userId);
+            }
+        }else{
             try (PrintWriter out = response.getWriter()) {
                 out.println(userId);
             }
         }
+
     }
     
     @Override
