@@ -1,6 +1,7 @@
 package database.managers;
 
 import database.entities.Stamps;
+import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -29,12 +30,9 @@ public class StampManager {
     }
     
     public List<Stamps> getMyStampBook(Integer referenceUserId){
-        return em.createNamedQuery("Stamps.findByReferenceUserId", Stamps.class)
+        List<Stamps> retStamps = em.createNamedQuery("Stamps.findByReferenceUserId", Stamps.class)
                 .setParameter("userId", referenceUserId)
                 .getResultList();
+         return retStamps.isEmpty() ? null : retStamps;
     }
-    
-//    public List<Stamps> getStampRallyAlbum(Integer stampRallyid, Integer referenceUserid){
-//        return em.createNamedQuery("Stamps.findByStampRallyIdAndReferenceUserId", .class)
-//    }
 }

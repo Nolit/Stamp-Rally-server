@@ -4,6 +4,7 @@ public class StampRallyData {
     private Integer stampRallyId;
     private String stampRallyTitle;
     private String stampRallyCreatorName;
+    private Integer stampRallyCreatorUserId;
     private byte[] picture;
 
     /**
@@ -60,5 +61,19 @@ public class StampRallyData {
      */
     public void setPicture(byte[] picture) {
         this.picture = picture;
+    }
+    
+        /**
+     * @return the stampRallyCreatorUserId
+     */
+    public Integer getStampRallyCreatorUserId() {
+        return stampRallyCreatorUserId;
+    }
+
+    /**
+     * @param stampRallyCreatorUserId the stampRallyCreatorUserId to set
+     */
+    public void setStampRallyCreatorUserId(Integer stampRallyCreatorUserId) {
+        this.stampRallyCreatorUserId = stampRallyCreatorUserId;
     }
 }
