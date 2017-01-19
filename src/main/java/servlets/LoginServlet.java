@@ -1,5 +1,6 @@
 package servlets;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import database.entities.Users;
 import database.managers.UserManager;
 import java.io.IOException;
@@ -10,11 +11,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import com.fasterxml.jackson.databind.ObjectMapper;
-/**
- *
- * @author karin757
- */
+
 @WebServlet(name = "LoginServlet", urlPatterns = {"/login"})
 public class LoginServlet extends HttpServlet {
     @EJB
@@ -27,13 +24,22 @@ public class LoginServlet extends HttpServlet {
         String mail = request.getParameter("mailAddress");
         String pass = request.getParameter("password");
         
-        boolean isLogin = um.login(mail,pass);
-        System.out.println("ユーザいる：" + isLogin);
+        System.out.println("デバッグ:ログインメールアドレス" + mail);
+        System.out.println("デバッグ:ログインパスワード" + pass);
         
-        try (PrintWriter out = response.getWriter()) {
-            out.println(isLogin);
+        Users loginUser = um.readByEmailAndPassword(mail,pass);
+        if(loginUser != null){
+            System.out.println("デバッグ:ログイン成功！" + loginUser.getUserName() +"でログインしました。");
+        }else{   
+            System.out.println("デバッグ:ログインユーザーがnullです");
         }
- 
+        
+        ObjectMapper mapper = new ObjectMapper();
+        String json = mapper.writeValueAsString(loginUser);
+        try (PrintWriter out = response.getWriter()) {
+            out.println(json);
+        }
+
     }
     
     @Override
@@ -51,6 +57,6 @@ public class LoginServlet extends HttpServlet {
     @Override
     public String getServletInfo() {
         return "Short description";
-    }// </editor-fold>
+    }
 
 }

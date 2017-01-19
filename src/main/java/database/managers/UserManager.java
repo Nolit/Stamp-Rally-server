@@ -30,13 +30,4 @@ public class UserManager {
                 .getResultList();
         return list.isEmpty() ? null : list.get(0);
     }
-        //ログインに使う
-    public boolean login(String email, String password){
-        List<Users> a = em.createNamedQuery("Users.findByLoginData", Users.class)
-          .setParameter("mailAddress", email)
-          .setParameter("password", password)
-          .getResultList();
-        boolean b = a.size()>0;
-        return b;
-    }
 }
