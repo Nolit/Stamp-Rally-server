@@ -56,7 +56,7 @@ public class StampRallys implements Serializable {
     private Integer stamprallyId;
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 15)
+    @Size(min = 1, max = 40)
     @Column(name = "stamp_thumbnail")
     private String stampThumbnail;
     @Basic(optional = false)
