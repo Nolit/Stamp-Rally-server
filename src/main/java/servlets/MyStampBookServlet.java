@@ -57,7 +57,9 @@ public class MyStampBookServlet extends HttpServlet {
             data.setPicture(ImageUtil.read(i.getPicturePass()));
             data.setStampName(i.getStampName());
             data.setStampDate(sdf.format(i.getStampDate()));
-            data.setStampRallyName(i.getStampRallysList().get(0).getStamprallyName());
+            if(i.getStampRallysList().size() != 0){
+                data.setStampRallyName(i.getStampRallysList().get(0).getStamprallyName());
+            }
             stampDataSet[index] = data;
         }
         
