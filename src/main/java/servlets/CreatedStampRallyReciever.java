@@ -72,15 +72,16 @@ public class CreatedStampRallyReciever extends HttpServlet {
         StampRallys stampRally = new StampRallys();
         stampRally.setStamprallyName(title);
         stampRally.setStamrallyComment(summary);
-        String str = UUID.randomUUID().toString().substring(0, 11);
-        stampRally.setStampThumbnail(str);
-        stampRally.setSearchId(str);
+        String uuid = UUID.randomUUID().toString().substring(0, 11);
+        String thumbnailPath = sm.read(selectedStampIdList.get(0)).getPicturePass();
+        stampRally.setStampThumbnail(thumbnailPath);
+        stampRally.setSearchId(uuid);
         stampRally.getUsersList().add(user);
         for(Integer id : selectedStampIdList){
             stampRally.getStampList().add(sm.read(id));
         }
         srm.create(stampRally);
-        srm.clearStampRally(stampRally, user);
+        srm.clearStampRally(srm.update(stampRally), user);
         
         try (PrintWriter out = response.getWriter()) {
             out.print(true);
