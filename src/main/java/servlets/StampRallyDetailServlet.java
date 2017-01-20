@@ -39,12 +39,12 @@ public class StampRallyDetailServlet extends HttpServlet {
         response.setContentType("application/json;charset=UTF-8");
         
         //パラメータの受取
-        loginUserId = Integer.parseInt(request.getParameter("loginUserId"));
-        referenceUserId = Integer.parseInt(request.getParameter("referenceUserId"));
-        stampRallyId = Integer.parseInt(request.getParameter("stampRallyId"));
         System.out.println("デバッグ:StampRallyDetail:"+request.getParameter("loginUserId"));
         System.out.println("デバッグ:StampRallyDetail:"+request.getParameter("referenceUserId"));
         System.out.println("デバッグ:StampRallyDetail:"+request.getParameter("stampRallyId"));
+        loginUserId = Integer.parseInt(request.getParameter("loginUserId"));
+        referenceUserId = Integer.parseInt(request.getParameter("referenceUserId"));
+        stampRallyId = Integer.parseInt(request.getParameter("stampRallyId"));
 
         //データベース読み込み
         StampRallyDetailPageData pageData = getPageData(um.read(referenceUserId), srm.read(stampRallyId));

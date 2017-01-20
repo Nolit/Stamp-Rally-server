@@ -25,8 +25,11 @@ import utilities.ImageUtil;
             throws ServletException, IOException {
         response.setContentType("application/json;charset=UTF-8");
 
+        String id = request.getParameter("playingStampRallyId");
+        System.out.println("MapServlet : "+id);
+
         //読み込み
-        StampRallys stampRally = copy(srm.read(4));
+        StampRallys stampRally = copy(srm.read(Integer.valueOf(id)));
         ObjectMapper mapper = new ObjectMapper();
         String json = mapper.writeValueAsString(stampRally);
 
