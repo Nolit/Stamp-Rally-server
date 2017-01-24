@@ -23,7 +23,7 @@ public final class ImageUtil {
     private static final String S = "/";
     private static final String USER_IMG_PATH = "img" + S + "users" + S;
     private static final String USER_STAMP_FOLDER = "stamp" + S;
-    private static final String EXTENTION = "png";
+    private static final String EXTENTION = "jpg";
     private ImageUtil(){}
     
     public static String create(int userId, byte[] image){
@@ -39,7 +39,7 @@ public final class ImageUtil {
             if(writeImage == null){
                 throw new IOException("画像の形式が不正です");
             }
-            ImageIO.write(writeImage, "png", new File(filePath));
+            ImageIO.write(writeImage, EXTENTION, new File(filePath));
         } catch (IOException ex) {
             Logger.getLogger(ImageUtil.class.getName()).log(Level.SEVERE, null, ex);
         }
