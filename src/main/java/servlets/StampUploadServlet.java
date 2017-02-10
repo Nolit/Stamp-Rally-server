@@ -86,7 +86,7 @@ public class StampUploadServlet extends HttpServlet {
             }
             
             byte[] picture = Base64.decodeBase64((String) stampData.get("picture"));
-            String picturePath = ImageUtil.create(user.getUserId(), picture);
+            String picturePath = ImageUtil.createStamp(user.getUserId(), picture);
             
             Stamps myStamp = new Stamps(stampData);
             myStamp.setStampPads(pad);

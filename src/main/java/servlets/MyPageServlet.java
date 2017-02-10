@@ -31,6 +31,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import utilities.ImageUtil;
 
 @WebServlet(name = "MyPageServlet", urlPatterns = {"/myPage"})
 public class MyPageServlet extends HttpServlet {
@@ -44,8 +45,9 @@ public class MyPageServlet extends HttpServlet {
         
         String email = request.getParameter("mailAddress");
         String password = request.getParameter("password");
-        
         Users user = um.readByEmailAndPassword(email, password);
+        byte[] thumbnail = ImageUtil.read(user.getThumbnail());
+        user.setThumbnailData(thumbnail);
         
         ObjectMapper mapper = new ObjectMapper();
         mapper.addMixInAnnotations(Users.class, MyPageServlet.OgoriView.class);

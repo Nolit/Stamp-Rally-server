@@ -23,15 +23,33 @@ public final class ImageUtil {
     private static final String S = "/";
     private static final String USER_IMG_PATH = "img" + S + "users" + S;
     private static final String USER_STAMP_FOLDER = "stamp" + S;
+    private static final String USER_THUMBNAIL_FOLDER = "thumbnail" + S;    
     private static final String EXTENTION = "jpg";
     private ImageUtil(){}
     
-    public static String create(int userId, byte[] image){
+    public static String createStamp(int userId, byte[] image){
         String fileDir = USER_IMG_PATH + userId + S + USER_STAMP_FOLDER;
         File userDir = new File(fileDir);
         userDir.mkdirs();
         
         String filePath = fileDir + (userDir.listFiles().length + 1) + "." + EXTENTION;
+        createImage(filePath, image);
+
+        return filePath;
+    }
+    
+    public static String createUser(int userId, byte[] image){
+        String fileDir = USER_IMG_PATH + userId + S + USER_THUMBNAIL_FOLDER;
+        File userDir = new File(fileDir);
+        userDir.mkdirs();
+        
+        String filePath = fileDir + (userDir.listFiles().length + 1) + "." + EXTENTION;
+        createImage(filePath, image);
+
+        return filePath;
+    }
+    
+    private static void createImage(String filePath, byte[] image){
         ByteArrayInputStream bais = new ByteArrayInputStream(image);
         BufferedImage writeImage;
         try {
@@ -43,8 +61,6 @@ public final class ImageUtil {
         } catch (IOException ex) {
             Logger.getLogger(ImageUtil.class.getName()).log(Level.SEVERE, null, ex);
         }
-
-        return filePath;
     }
     
     public static byte[] read(String path){
