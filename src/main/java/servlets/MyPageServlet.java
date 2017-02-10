@@ -25,6 +25,7 @@ import database.managers.UserManager;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Collection;
+import java.util.Date;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -50,7 +51,7 @@ public class MyPageServlet extends HttpServlet {
         user.setThumbnailData(thumbnail);
         
         ObjectMapper mapper = new ObjectMapper();
-        mapper.addMixInAnnotations(Users.class, MyPageServlet.OgoriView.class);
+        mapper.addMixInAnnotations(Users.class, JsonIgnoreFilter.class);
         String json = mapper.writeValueAsString(user);
 
         try (PrintWriter out = response.getWriter()) {
@@ -58,8 +59,7 @@ public class MyPageServlet extends HttpServlet {
         }
     }
    
-    static interface OgoriView {
-        @JsonIgnore String getPrice();
+    static interface JsonIgnoreFilter {
         @JsonIgnore Collection<Stamps> getStampsCollection();
         @JsonIgnore Collection<StampPads> getStampPadsCollection();
         @JsonIgnore Collection<Activities> getActivitiesCollection();
@@ -79,5 +79,9 @@ public class MyPageServlet extends HttpServlet {
         @JsonIgnore Collection<Activities> getActivitiesCollection1();
         @JsonIgnore Collection<StampRallys> getStampRallysCollection();
         @JsonIgnore Collection<Questions> getQuestionsCollection1();
+        @JsonIgnore String getThumbnail();
+        @JsonIgnore String getMailAddress();
+        @JsonIgnore String getPassword();
+        @JsonIgnore Date getDeleteDate();
     }
 }
