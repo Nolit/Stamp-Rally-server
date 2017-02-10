@@ -150,6 +150,8 @@ public class Users implements Serializable {
     private Collection<StampPads> myStampCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId")
     private List<Stamps> clearStampCollection;
+    
+    private byte[] thumbnailData;
 
     public Users() {
     }
@@ -431,25 +433,13 @@ public class Users implements Serializable {
     public void setStampsCollection(List<Stamps> stampsCollection) {
         this.clearStampCollection = stampsCollection;
     }
-
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (userId != null ? userId.hashCode() : 0);
-        return hash;
+    
+    public byte[] getThumbnailData() {
+        return thumbnailData;
     }
 
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Users)) {
-            return false;
-        }
-        Users other = (Users) object;
-        if ((this.userId == null && other.userId != null) || (this.userId != null && !this.userId.equals(other.userId))) {
-            return false;
-        }
-        return true;
+    public void setThumbnailData(byte[] thumbnailData) {
+        this.thumbnailData = thumbnailData;
     }
 
     @Override

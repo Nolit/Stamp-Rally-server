@@ -36,49 +36,25 @@ import javax.servlet.http.HttpServletResponse;
 public class MyPageServlet extends HttpServlet {
     @EJB
     UserManager um;
-    
-     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-//        response.setContentType("text/html;charset=UTF-8");
-        response.setContentType("application/json;charset=UTF-8");
-        //新規作成
-//        sm.create(new Sample("name"));
-
-        //読み込み
-        Users user = um.read(2);
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.addMixInAnnotations(Users.class, MyPageServlet.OgoriView.class);
-        String json = mapper.writeValueAsString(user);
-        //更新
-//        Sample sample = sm.read(2);
-//        sample.setName("updatedName");
-//        sm.update(sample);
-
-        //削除
-//        Sample sample = sm.read(2);
-//        sm.remove(sample);
-
-        try (PrintWriter out = response.getWriter()) {
-            out.println(json);
-        }
-     }
         
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
-    }
+        response.setContentType("application/json;charset=UTF-8");
+        
+        String email = request.getParameter("mailAddress");
+        String password = request.getParameter("password");
+        
+        Users user = um.readByEmailAndPassword(email, password);
+        
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.addMixInAnnotations(Users.class, MyPageServlet.OgoriView.class);
+        String json = mapper.writeValueAsString(user);
 
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        processRequest(request, response);
+        try (PrintWriter out = response.getWriter()) {
+            out.println(json);
+        }
     }
-
-    @Override
-    public String getServletInfo() {
-        return "Short description";
-    }// </editor-fold
    
     static interface OgoriView {
         @JsonIgnore String getPrice();
