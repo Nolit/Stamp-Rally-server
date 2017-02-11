@@ -20,8 +20,8 @@ public class ReviewsPK implements Serializable {
 
     @Basic(optional = false)
     @NotNull
-    @Column(name = "stamrally_id")
-    private int stamrallyId;
+    @Column(name = "stamprally_id")
+    private int stampRallyId;
     @Basic(optional = false)
     @NotNull
     @Column(name = "user_id")
@@ -31,16 +31,16 @@ public class ReviewsPK implements Serializable {
     }
 
     public ReviewsPK(int stamrallyId, int userId) {
-        this.stamrallyId = stamrallyId;
+        this.stampRallyId = stamrallyId;
         this.userId = userId;
     }
 
     public int getStamrallyId() {
-        return stamrallyId;
+        return stampRallyId;
     }
 
     public void setStamrallyId(int stamrallyId) {
-        this.stamrallyId = stamrallyId;
+        this.stampRallyId = stamrallyId;
     }
 
     public int getUserId() {
@@ -54,7 +54,7 @@ public class ReviewsPK implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (int) stamrallyId;
+        hash += (int) stampRallyId;
         hash += (int) userId;
         return hash;
     }
@@ -66,7 +66,7 @@ public class ReviewsPK implements Serializable {
             return false;
         }
         ReviewsPK other = (ReviewsPK) object;
-        if (this.stamrallyId != other.stamrallyId) {
+        if (this.stampRallyId != other.stampRallyId) {
             return false;
         }
         if (this.userId != other.userId) {
@@ -77,7 +77,7 @@ public class ReviewsPK implements Serializable {
 
     @Override
     public String toString() {
-        return "entities.ReviewsPK[ stamrallyId=" + stamrallyId + ", userId=" + userId + " ]";
+        return "entities.ReviewsPK[ stamrallyId=" + stampRallyId + ", userId=" + userId + " ]";
     }
     
 }
