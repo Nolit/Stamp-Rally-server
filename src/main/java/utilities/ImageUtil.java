@@ -66,9 +66,11 @@ public final class ImageUtil {
     public static byte[] read(String path){
         ByteArrayOutputStream baos = new ByteArrayOutputStream();;
         try {
-            BufferedImage img = ImageIO.read(new File(path));
+            File file = new File(path);
+            file = file.exists() ? file : new File("img/common/noimage.png");
+            BufferedImage img = ImageIO.read(file);
             ImageIO.write(img, EXTENTION, baos);
-        } catch (IOException ex) {
+        } catch (Exception ex) {
             Logger.getLogger(ImageUtil.class.getName()).log(Level.SEVERE, null, ex);
         }
         
