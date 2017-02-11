@@ -12,6 +12,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import data.StampData;
 import data.StampRallyDetailPageData;
 import database.entities.RallyCompleteUsers;
+import database.entities.Reviews;
 import database.entities.StampRallys;
 import database.entities.Stamps;
 import database.entities.Users;
@@ -73,12 +74,11 @@ public class StampRallyDetailServlet extends HttpServlet {
         retPageData.setReferenceUserName(referenceUser.getUserName());
         
         //レビューテーブル
-        Integer evaluatedPoint = rm.findEvaluatedData(referenceUserId, stampRallyId).getReview();
+        Reviews review = rm.findEvaluatedData(referenceUserId, stampRallyId);
+        Integer evaluatedPoint = review == null ? null : review.getReview();
         Double averagedPoint = rm.getAveragePoint(stampRallyId);
         retPageData.setStampRallyReviewPoint(evaluatedPoint);           //参照ユーザーの評価値（スタンプラリーに対する評価値）
         retPageData.setStampRallyReviewAveragePoint(averagedPoint);    //スタンプラリーの平均評価地
-        System.out.println("evaluatedPoint:" + retPageData.getStampRallyReviewPoint());
-        System.out.println("averagedPoint:" + retPageData.getStampRallyReviewAveragePoint());
         
         //コンプリートユーザーテーブル
         RallyCompleteUsers RallyCompleteData = srm.getStampRallyCompleteUser(loginUserId, stampRally.getStamprallyId());

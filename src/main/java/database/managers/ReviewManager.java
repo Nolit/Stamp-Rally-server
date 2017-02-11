@@ -55,9 +55,10 @@ public class ReviewManager {
         return reviewList.isEmpty() ? null : reviewList.get(0);
     }
     
-    public double getAveragePoint(int stampRallyId){
-        return em.createNamedQuery("Reviews.averageByStamrallyId", Double.class)
+    public Double getAveragePoint(int stampRallyId){
+        List<Double> points =  em.createNamedQuery("Reviews.averageByStamrallyId", Double.class)
                 .setParameter("stampRallyId", stampRallyId)
-                .getSingleResult();
+                .getResultList();
+        return points.isEmpty() ? null : points.get(0);
     }
 }
