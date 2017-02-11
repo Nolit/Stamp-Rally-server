@@ -119,8 +119,8 @@ public class Users implements Serializable {
     @ManyToMany(mappedBy = "usersCollection")
     private Collection<Questions> questionsCollection;
     
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "users")
-    private StampBookLikes stampBookLikes;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "users")
+    private List<StampBookLikes> stampBookLikes;
     
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "users")
     private Collection<RallyCompleteUsers> rallyCompleteUsersCollection;
@@ -168,6 +168,9 @@ public class Users implements Serializable {
     
     @Transient
     private byte[] thumbnailData;
+    
+    private static boolean MALE = true;
+    private static boolean FEMALE = false;
 
     public Users() {
     }
@@ -188,10 +191,6 @@ public class Users implements Serializable {
 
     public Integer getUserId() {
         return userId;
-    }
-
-    public void setUserId(Integer userId) {
-        this.userId = userId;
     }
 
     public String getSearchId() {
@@ -226,12 +225,20 @@ public class Users implements Serializable {
         this.userName = userName;
     }
 
-    public boolean getSex() {
-        return sex;
+    public boolean isMale() {
+        return sex == MALE;
+    }
+    
+    public boolean isFemale() {
+        return sex == FEMALE;
     }
 
-    public void setSex(boolean sex) {
-        this.sex = sex;
+    public void setMale() {
+        this.sex = MALE;
+    }
+    
+    public void setFemale() {
+        this.sex = FEMALE;
     }
 
     public Date getBirthday() {
@@ -266,12 +273,16 @@ public class Users implements Serializable {
         this.admissionDay = admissionDay;
     }
 
-    public boolean getPrivateFlag() {
-        return privateFlag;
+    public boolean isPrivateAccount() {
+        return privateFlag == true;
     }
 
-    public void setPrivateFlag(boolean privateFlag) {
-        this.privateFlag = privateFlag;
+    public void setPrivateAccount() {
+        this.privateFlag = true;
+    }
+    
+    public void setPublicAccount() {
+        this.privateFlag = false;
     }
 
     public Date getDeleteDate() {
@@ -283,21 +294,12 @@ public class Users implements Serializable {
     }
 
     @XmlTransient
-    public Collection<Admins> getAdminsCollection() {
-        return adminsCollection;
-    }
-
-    public void setAdminsCollection(Collection<Admins> adminsCollection) {
-        this.adminsCollection = adminsCollection;
-    }
-
-    @XmlTransient
     public Collection<Activities> getActivitiesCollection() {
         return activitiesCollection;
     }
 
-    public void setActivitiesCollection(Collection<Activities> activitiesCollection) {
-        this.activitiesCollection = activitiesCollection;
+    public void addActivity(Activities myActivity) {
+        activitiesCollection.add(myActivity);
     }
 
     @XmlTransient
@@ -305,52 +307,16 @@ public class Users implements Serializable {
         return stampRallysCollection;
     }
 
-    public void setStampRallysCollection(Collection<StampRallys> stampRallysCollection) {
-        this.stampRallysCollection = stampRallysCollection;
+    public void addCreatedStampRally(StampRallys myStampRally) {
+        stampRallysCollection.add(myStampRally);
     }
 
-    @XmlTransient
-    public Collection<Questions> getQuestionsCollection() {
-        return questionsCollection;
-    }
-
-    public void setQuestionsCollection(Collection<Questions> questionsCollection) {
-        this.questionsCollection = questionsCollection;
-    }
-
-    public StampBookLikes getStampBookLikes() {
+    public List<StampBookLikes> getStampBookLikes() {
         return stampBookLikes;
     }
 
-    public void setStampBookLikes(StampBookLikes stampBookLikes) {
-        this.stampBookLikes = stampBookLikes;
-    }
-
-    @XmlTransient
-    public Collection<RallyCompleteUsers> getRallyCompleteUsersCollection() {
-        return rallyCompleteUsersCollection;
-    }
-
-    public void setRallyCompleteUsersCollection(Collection<RallyCompleteUsers> rallyCompleteUsersCollection) {
-        this.rallyCompleteUsersCollection = rallyCompleteUsersCollection;
-    }
-
-    @XmlTransient
-    public Collection<Reports> getReportsCollection() {
-        return reportsCollection;
-    }
-
-    public void setReportsCollection(Collection<Reports> reportsCollection) {
-        this.reportsCollection = reportsCollection;
-    }
-
-    @XmlTransient
-    public Collection<Reports> getReportsCollection1() {
-        return reportsCollection1;
-    }
-
-    public void setReportsCollection1(Collection<Reports> reportsCollection1) {
-        this.reportsCollection1 = reportsCollection1;
+    public void likedStampBook(StampBookLikes stampBookLike) {
+        stampBookLikes.add(stampBookLike);
     }
 
     @XmlTransient
