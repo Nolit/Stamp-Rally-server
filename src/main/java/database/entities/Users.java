@@ -51,106 +51,121 @@ import javax.xml.bind.annotation.XmlTransient;
 })
 
 public class Users implements Serializable {
-
     private static final long serialVersionUID = 1L;
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
     @Column(name = "user_id")
     private Integer userId;
-    @Basic(optional = false)
+    
     @NotNull
     @Size(min = 1, max = 15)
     @Column(name = "search_id")
     private String searchId;
-    @Basic(optional = false)
+    
     @NotNull
     @Size(min = 1, max = 20)
     @Column(name = "mail_address")
     private String mailAddress;
-    @Basic(optional = false)
+    
     @NotNull
     @Lob
     @Size(min = 1, max = 65535)
-    @Column(name = "password")
     private String password;
-    @Basic(optional = false)
+    
     @NotNull
     @Lob
     @Size(min = 1, max = 65535)
     @Column(name = "user_name")
     private String userName;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "sex")
+    
+    @Basic(optional = true)
     private boolean sex;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "birthday")
+    
+    @Basic(optional = true)
     @Temporal(TemporalType.DATE)
     private Date birthday;
-    @Basic(optional = false)
-    @NotNull
+    
+    @Basic(optional = true)
     @Size(min = 1, max = 9)
-    @Column(name = "thumbnail")
     private String thumbnail;
-    @Basic(optional = false)
-    @NotNull
+    
+    @Basic(optional = true)
     @Size(min = 1, max = 9)
-    @Column(name = "profile")
     private String profile;
-    @Basic(optional = false)
+    
     @NotNull
     @Column(name = "admission_day")
     @Temporal(TemporalType.DATE)
     private Date admissionDay;
-    @Basic(optional = false)
+    
     @NotNull
     @Column(name = "private_flag")
     private boolean privateFlag;
+    
     @Column(name = "delete_date")
     @Temporal(TemporalType.DATE)
     private Date deleteDate;
+    
     @ManyToMany(mappedBy = "usersCollection")
     private Collection<Admins> adminsCollection;
+    
     @ManyToMany(mappedBy = "usersCollection")
     private Collection<Activities> activitiesCollection;
+    
     @ManyToMany(mappedBy = "usersCollection")
     private Collection<StampRallys> stampRallysCollection;
+    
     @ManyToMany(mappedBy = "usersCollection")
     private Collection<Questions> questionsCollection;
+    
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "users")
     private StampBookLikes stampBookLikes;
+    
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "users")
     private Collection<RallyCompleteUsers> rallyCompleteUsersCollection;
+    
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "reportedUserId")
     private Collection<Reports> reportsCollection;
+    
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId")
     private Collection<Reports> reportsCollection1;
+    
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "users")
     private Collection<FriendRequests> friendRequestsCollection;
+    
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "users1")
     private Collection<FriendRequests> friendRequestsCollection1;
+    
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId")
     private Collection<Questions> questionsCollection1;
+    
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "users")
     private Collection<Friends> friendsCollection;
+    
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "users1")
     private Collection<Friends> friendsCollection1;
+    
     @JoinColumn(name = "stamprally_id", referencedColumnName = "stamprally_id")
     @ManyToOne(optional = false)
     private StampRallys stamprallyId;
+    
     @JoinColumn(name = "activity_id", referencedColumnName = "activity_id")
     @ManyToOne(optional = false)
     private Activities activityId;
+    
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "users")
     private Collection<Reviews> reviewsCollection;
+    
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId")
     private Collection<Activities> activitiesCollection1;
+    
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId")
     private Collection<StampPads> myStampCollection;
+    
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId")
     private List<Stamps> clearStampCollection;
+    
     @Transient
     private byte[] thumbnailData;
 
