@@ -32,24 +32,32 @@ public class ReviewManager {
         int userId = user.getUserId();
         int stampRallyId = stampRally.getStamprallyId();
         
+        Reviews review = findEvaluatedData(userId, stampRallyId);
+        if(review == null){
+            review =  new Reviews(new ReviewsPK(stampRallyId, userId));
+            review.setUsers(user);
+            review.setStampRallys(stampRally);
+            review.setUpdateDate(new Date());
+            review.setReview(point);
+            create(review);
+            return;
+        }
+        review.setUpdateDate(new Date());
+        review.setReview(point);
+        update(review);
+    }
+    
+    public Reviews findEvaluatedData(int userId, int stampRallyId){
         List<Reviews> reviewList = em.createNamedQuery("Reviews.findEvaluatedData", Reviews.class)
                 .setParameter("userId", userId)
                 .setParameter("stampRallyId", stampRallyId)
                 .getResultList();
-        Reviews review;
-        if(reviewList.isEmpty()){
-            review =  new Reviews(new ReviewsPK(stampRallyId, userId));
-            review.setUsers(user);
-            review.setStampRallys(stampRally);
-        }else{
-            review =  reviewList.get(0);
-        }
-        review.setUpdateDate(new Date());
-        review.setReview(point);
-        if(reviewList.isEmpty()){
-            create(review);
-        }else{
-            update(review);
-        }
+        return reviewList.isEmpty() ? null : reviewList.get(0);
+    }
+    
+    public double getAveragePoint(int stampRallyId){
+        return em.createNamedQuery("Reviews.averageByStamrallyId", Double.class)
+                .setParameter("stampRallyId", stampRallyId)
+                .getSingleResult();
     }
 }

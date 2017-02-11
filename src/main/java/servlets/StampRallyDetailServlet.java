@@ -15,6 +15,7 @@ import database.entities.RallyCompleteUsers;
 import database.entities.StampRallys;
 import database.entities.Stamps;
 import database.entities.Users;
+import database.managers.ReviewManager;
 import database.managers.StampRallyManager;
 import database.managers.UserManager;
 import java.text.SimpleDateFormat;
@@ -27,6 +28,8 @@ public class StampRallyDetailServlet extends HttpServlet {
     StampRallyManager srm;
     @EJB
     UserManager um;
+    @EJB
+    ReviewManager rm;
     
     Integer loginUserId;
     Integer referenceUserId;
@@ -70,8 +73,12 @@ public class StampRallyDetailServlet extends HttpServlet {
         retPageData.setReferenceUserName(referenceUser.getUserName());
         
         //レビューテーブル
-//        retPageData.setStampRallyReviewPoint();           //参照ユーザーの評価値（スタンプラリーに対する評価値）
-//        retPageData.setStampRallyReviewAveragePoint();    //スタンプラリーの平均評価地
+        Integer evaluatedPoint = rm.findEvaluatedData(referenceUserId, stampRallyId).getReview();
+        Double averagedPoint = rm.getAveragePoint(stampRallyId);
+        retPageData.setStampRallyReviewPoint(evaluatedPoint);           //参照ユーザーの評価値（スタンプラリーに対する評価値）
+        retPageData.setStampRallyReviewAveragePoint(averagedPoint);    //スタンプラリーの平均評価地
+        System.out.println("evaluatedPoint:" + retPageData.getStampRallyReviewPoint());
+        System.out.println("averagedPoint:" + retPageData.getStampRallyReviewAveragePoint());
         
         //コンプリートユーザーテーブル
         RallyCompleteUsers RallyCompleteData = srm.getStampRallyCompleteUser(loginUserId, stampRally.getStamprallyId());

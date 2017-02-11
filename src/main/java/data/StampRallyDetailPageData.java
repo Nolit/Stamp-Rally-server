@@ -9,7 +9,7 @@ public class StampRallyDetailPageData {
     private String stampRallyComment;
     private boolean stampRallyFavorite;
     private Integer stampRallyReviewPoint;
-    private Integer stampRallyReviewAveragePoint;
+    private Double stampRallyReviewAveragePoint;
     
     //ユーザー情報
     private Integer stampRallyCreatorUserId;
@@ -88,10 +88,10 @@ public class StampRallyDetailPageData {
     public void setStampRallyCompleteDate(String stampRallyCompleteDate) {
         this.stampRallyCompleteDate = stampRallyCompleteDate;
     }
-    public Integer getStampRallyReviewAveragePoint() {
+    public Double getStampRallyReviewAveragePoint() {
         return stampRallyReviewAveragePoint;
     }
-    public void setStampRallyReviewAveragePoint(Integer stampRallyReviewAveragePoint) {
+    public void setStampRallyReviewAveragePoint(Double stampRallyReviewAveragePoint) {
         this.stampRallyReviewAveragePoint = stampRallyReviewAveragePoint;
     }
 }
