@@ -25,6 +25,7 @@ public final class ImageUtil {
     private static final String USER_STAMP_FOLDER = "stamp" + S;
     private static final String USER_THUMBNAIL_FOLDER = "thumbnail" + S;    
     private static final String EXTENTION = "jpg";
+    private static final String DEFAULT_PATH = "img/common/noimage.jpg";
     private ImageUtil(){}
     
     public static String createStamp(int userId, byte[] image){
@@ -66,8 +67,9 @@ public final class ImageUtil {
     public static byte[] read(String path){
         ByteArrayOutputStream baos = new ByteArrayOutputStream();;
         try {
-            File file = new File(path);
-            file = file.exists() ? file : new File("img/common/noimage.png");
+            String nonNullPath = path != null ? path : DEFAULT_PATH;
+            File file = new File(nonNullPath);
+            file = file.exists() ? file : new File(DEFAULT_PATH);
             BufferedImage img = ImageIO.read(file);
             ImageIO.write(img, EXTENTION, baos);
         } catch (Exception ex) {
