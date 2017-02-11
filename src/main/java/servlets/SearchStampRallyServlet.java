@@ -15,6 +15,7 @@ import data.StampRallyData;
 import java.util.List;
 import java.io.*;
 import utilities.ImageUtil;
+import utilities.StringDecoder;
 
 @WebServlet(name = "SearchStampRallyServelet", urlPatterns = {"/SearchStampRally"})
 public class SearchStampRallyServlet extends HttpServlet {
@@ -26,7 +27,7 @@ public class SearchStampRallyServlet extends HttpServlet {
         response.setContentType("application/json;charset=UTF-8");        
         System.out.println("デバッグ:Search:"+request.getParameter("searchKey"));
 
-        StampRallyData[] stampRallyData = copy(srm.search(decodeString(request.getParameter("searchKey"))));
+        StampRallyData[] stampRallyData = copy(srm.search(StringDecoder.decode(request.getParameter("searchKey"))));
         
         if(stampRallyData.length < 1){
             System.out.println("debug:search:検索結果がありませんでした。");
@@ -67,16 +68,4 @@ public class SearchStampRallyServlet extends HttpServlet {
             throws ServletException, IOException {
         processRequest(request, response);
     }
-    
-    protected String decodeString(String decodesr){
-    try {
-      byte[] byteData = decodesr.getBytes("ISO_8859_1");
-      decodesr = new String(byteData, "UTF-8");
-    }catch(UnsupportedEncodingException e){
-      return null;
-    }
-
-    return decodesr;
-  }
-    
 }

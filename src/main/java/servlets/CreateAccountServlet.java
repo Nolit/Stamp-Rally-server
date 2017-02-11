@@ -1,5 +1,6 @@
 package servlets;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import database.entities.Users;
 import database.managers.UserManager;
 import java.io.IOException;
@@ -12,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
+import utilities.StringDecoder;
 
 @WebServlet(name = "CreateAccountServlet", urlPatterns = {"/createAccount"})
 public class CreateAccountServlet extends HttpServlet {
@@ -24,7 +26,7 @@ public class CreateAccountServlet extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         
         String email = request.getParameter("email");
-        String userName = request.getParameter("userName");
+        String userName = StringDecoder.decode(request.getParameter("userName"));
         String password = request.getParameter("password");
         Users newUser = new Users(email, password, userName);
         
@@ -33,8 +35,9 @@ public class CreateAccountServlet extends HttpServlet {
         } catch(Exception ex) {
             newUser = null;
         } finally {
+            String json = new ObjectMapper().writeValueAsString(newUser);
             try(PrintWriter out = response.getWriter()) {
-                out.print(newUser);
+                out.print(json);
             }
         }
     }
