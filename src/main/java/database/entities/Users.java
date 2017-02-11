@@ -1,6 +1,7 @@
 package database.entities;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import java.io.Serializable;
 import java.util.Collection;
@@ -169,8 +170,9 @@ public class Users implements Serializable {
     
     @Transient
     private byte[] thumbnailData;
-    
+    @Transient
     private static boolean MALE = true;
+    @Transient
     private static boolean FEMALE = false;
 
     public Users(){
@@ -234,10 +236,12 @@ public class Users implements Serializable {
         this.userName = userName;
     }
 
+    @JsonIgnore
     public boolean isMale() {
         return sex == MALE;
     }
     
+    @JsonIgnore
     public boolean isFemale() {
         return sex == FEMALE;
     }
@@ -282,6 +286,7 @@ public class Users implements Serializable {
         this.admissionDay = admissionDay;
     }
 
+    @JsonIgnore
     public boolean isPrivateAccount() {
         return privateFlag == true;
     }
