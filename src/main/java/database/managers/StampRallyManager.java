@@ -2,6 +2,7 @@ package database.managers;
 
 import database.entities.RallyCompleteUsers;
 import database.entities.RallyCompleteUsersPK;
+import database.entities.StampBookLikes;
 import java.util.Date;
 import java.util.Iterator;
 import database.entities.StampRallys;
@@ -72,4 +73,8 @@ public class StampRallyManager {
             return ret.size() > 0 ? ret.get(0) : null;
     }
     
+    public void addFavoriteStampRally(Users user, StampRallys stampRally){
+        StampBookLikes like = new StampBookLikes(user, stampRally);
+        em.persist(like);
+    }
 }

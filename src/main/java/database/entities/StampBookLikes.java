@@ -60,9 +60,11 @@ public class StampBookLikes implements Serializable {
         this.userId = userId;
     }
 
-    public StampBookLikes(Integer userId, Date registrationDate) {
-        this.userId = userId;
-        this.registrationDate = registrationDate;
+    public StampBookLikes(Users user, StampRallys stampRally) {
+        userId = user.getUserId();
+        this.users = user;
+        this.stamprally = stampRally;
+        registrationDate = new Date();
     }
 
     public Integer getUserId() {
