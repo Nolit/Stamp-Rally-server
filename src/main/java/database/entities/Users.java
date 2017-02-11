@@ -6,6 +6,7 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -60,12 +61,12 @@ public class Users implements Serializable {
     
     @NotNull
     @Size(min = 1, max = 15)
-    @Column(name = "search_id")
+    @Column(name = "search_id", unique = true)
     private String searchId;
     
     @NotNull
     @Size(min = 1, max = 20)
-    @Column(name = "mail_address")
+    @Column(name = "mail_address", unique = true)
     private String mailAddress;
     
     @NotNull
@@ -94,9 +95,9 @@ public class Users implements Serializable {
     @Size(min = 1, max = 9)
     private String profile;
     
-    @NotNull
+    @Basic(optional = true)
     @Column(name = "admission_day")
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date admissionDay;
     
     @NotNull
@@ -172,7 +173,15 @@ public class Users implements Serializable {
     private static boolean MALE = true;
     private static boolean FEMALE = false;
 
-    public Users() {
+    public Users(){
+        
+    }
+    public Users(String email, String password, String userName) {
+        this.mailAddress = email;
+        this.password = password;
+        this.userName = userName;
+        this.searchId = UUID.randomUUID().toString().substring(0, 14);
+        this.admissionDay = new Date();
     }
 
     public Users(Integer userId, String searchId, String mailAddress, String password, String userName, boolean sex, Date birthday, String thumbnail, String profile, Date admissionDay, boolean privateFlag) {
