@@ -7,6 +7,7 @@ public class StampRallyDetailPageData {
     private Integer stampRallyId;
     private String stampRallyTitle;
     private String stampRallyComment;
+    private boolean stampRallyFavorite;
     private Integer stampRallyReviewPoint;
     private Integer stampRallyReviewAveragePoint;
     
@@ -38,6 +39,12 @@ public class StampRallyDetailPageData {
     }
     public void setStampRallyComment(String stampRallyComment) {
         this.stampRallyComment = stampRallyComment;
+    }
+    public boolean isFavorite(){
+        return stampRallyFavorite;
+    }
+    public void setFavorite(boolean favorite){
+        this.stampRallyFavorite = favorite;
     }
     public Integer getStampRallyReviewPoint() {
         return stampRallyReviewPoint;
