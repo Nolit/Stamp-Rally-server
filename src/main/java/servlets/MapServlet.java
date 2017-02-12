@@ -13,23 +13,35 @@ import javax.servlet.http.HttpServletResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import database.entities.StampPads;
 import database.entities.Stamps;
+import database.managers.StampManager;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.function.ToIntFunction;
 import utilities.ImageUtil;
 @WebServlet(name = "MapServlet", urlPatterns = {"/map"})
     public class MapServlet extends HttpServlet {
     @EJB
     StampRallyManager srm;
+    @EJB
+    StampManager sm;
     
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("application/json;charset=UTF-8");
 
-        String id = request.getParameter("playingStampRallyId");
-        System.out.println("MapServlet : "+id);
+        int stampRallyId = Integer.valueOf(request.getParameter("playingStampRallyId"));
+        int userId = Integer.valueOf(request.getParameter("userId"));
+        System.out.println("MapServlet : "+stampRallyId);
 
-        //読み込み
-        StampRallys stampRally = copy(srm.read(Integer.valueOf(id)));
+        List<Stamps> myStamps = sm.findByUserId(userId);
+        StampRallys nonCopied = srm.read(stampRallyId);
+        calcurateGotStamps(nonCopied, myStamps);
+        StampRallys stampRally = copy(nonCopied);
+        
+        
         ObjectMapper mapper = new ObjectMapper();
         String json = mapper.writeValueAsString(stampRally);
 
@@ -49,6 +61,7 @@ import utilities.ImageUtil;
             toStamp.setStampId(fromStamp.getStampId());
             toStamp.setStampName(fromStamp.getStampName());
             toStamp.setStampComment(fromStamp.getStampComment());
+            toStamp.isHaving = fromStamp.isHaving;
             
             byte[] image = ImageUtil.read(fromStamp.getPicturePass());
             toStamp.setPicture(image);
@@ -64,6 +77,22 @@ import utilities.ImageUtil;
         return toObj;
     }
     
+    //StampRallyに含まれるStampの内、myStampsに存在するもののisHavingをtrueにする
+    private void calcurateGotStamps(final StampRallys stampRally, List<Stamps> myStamps){
+        for (Stamps stamp : stampRally.getStampList()) {
+            for (Stamps myStamp : myStamps) {
+                System.out.println(stamp.getStampPads().getStamptableId() + "");
+                System.out.println(stamp.getStampPads() + "");
+                System.out.println(stamp.getStampId() + "");
+                if(myStamp.getStampPads().getStamptableId().equals(stamp.getStampPads().getStamptableId())){
+                    System.out.println("equal!");
+                    stamp.isHaving = true;
+                    break;
+                }
+            }
+        }
+    }
+    
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -75,10 +104,4 @@ import utilities.ImageUtil;
             throws ServletException, IOException {
         processRequest(request, response);
     }
-
-    @Override
-    public String getServletInfo() {
-        return "Short description";
-    }// </editor-fold>
-
 }

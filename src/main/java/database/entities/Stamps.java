@@ -100,6 +100,8 @@ public class Stamps implements Serializable {
     
     @Transient
     private byte[] picture;
+    @Transient
+    public boolean isHaving = false;
 
     public Stamps() {
     }

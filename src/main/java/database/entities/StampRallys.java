@@ -39,12 +39,8 @@ import javax.xml.bind.annotation.XmlTransient;
 @NamedQueries({
     @NamedQuery(name = "StampRallys.findAll", query = "SELECT s FROM StampRallys s")
     , @NamedQuery(name = "StampRallys.findByStamprallyId", query = "SELECT s FROM StampRallys s WHERE s.stamprallyId = :stamprallyId")
-    , @NamedQuery(name = "StampRallys.findByStampThumbnail", query = "SELECT s FROM StampRallys s WHERE s.stampThumbnail = :stampThumbnail")
     , @NamedQuery(name = "StampRallys.findBySearchId", query = "SELECT s FROM StampRallys s WHERE s.searchId = :searchId")
     , @NamedQuery(name = "StampRallys.findByStamprallyName", query = "SELECT s FROM StampRallys s WHERE s.stamprallyName = :stamprallyName")
-    , @NamedQuery(name = "StampRallys.findByStamrallyComment", query = "SELECT s FROM StampRallys s WHERE s.stamrallyComment = :stamrallyComment")
-    , @NamedQuery(name = "StampRallys.findByOfficialFlag", query = "SELECT s FROM StampRallys s WHERE s.officialFlag = :officialFlag")
-    , @NamedQuery(name = "StampRallys.findByCreateDate", query = "SELECT s FROM StampRallys s WHERE s.createDate = :createDate")
     , @NamedQuery(name = "StampRallys.findBySearchKeyWord", query = "SELECT s FROM StampRallys s WHERE s.stamprallyName LIKE :keyword OR s.stamrallyComment LIKE :keyword")})
 
 public class StampRallys implements Serializable {
@@ -204,6 +200,10 @@ public class StampRallys implements Serializable {
             stampPadsList.add(stamp.getStampPads());
         }
         return stampPadsList;
+    }
+    
+    public void addStamp(Stamps stamp){
+        stampsList.add(stamp);
     }
     
     public void setStampList(List<Stamps> stampList){
