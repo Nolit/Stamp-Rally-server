@@ -67,14 +67,24 @@ public class StampRallyManager {
     }
     public RallyCompleteUsers getStampRallyCompleteUser(Integer achieverId, Integer stampRallyId){
         List<RallyCompleteUsers> ret = em.createNamedQuery("RallyCompleteUsers.findByUserIdAndReferenceStamprallyId", RallyCompleteUsers.class)
-                .setParameter("achieverId", achieverId)
-                .setParameter("stamprallyId", stampRallyId)
-                .getResultList();
+                                            .setParameter("achieverId", achieverId)
+                                            .setParameter("stamprallyId", stampRallyId)
+                                            .getResultList();
             return ret.size() > 0 ? ret.get(0) : null;
     }
     
     public void addFavoriteStampRally(Users user, StampRallys stampRally){
         StampBookLikes like = new StampBookLikes(user, stampRally);
         em.persist(like);
+    }
+    
+    public void removeFavoriteStampRally(Users user, StampRallys stampRally){
+        List<StampBookLikes> likes = em.createNamedQuery("StampBookLikes.findByUserIdAndStampRallyId", StampBookLikes.class)
+                                        .setParameter("userId", user.getUserId())
+                                        .setParameter("stampRallyId", stampRally.getStamprallyId())
+                                        .getResultList();
+        if( ! likes.isEmpty()){
+            em.remove(likes.get(0));
+        }
     }
 }

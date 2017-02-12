@@ -28,19 +28,23 @@ public class FavoriteStampRallyServlet extends HttpServlet {
         String email = request.getParameter("email");
         String password = request.getParameter("password");
         int stampRallyId = Integer.valueOf(request.getParameter("stampRallyId"));
-        boolean isFavorite = Boolean.valueOf(request.getParameter("favorite"));
+        Users user = um.readByEmailAndPassword(email, password);
+        StampRallys stampRally = srm.read(stampRallyId);
         
+        boolean isFavorite = Boolean.valueOf(request.getParameter("favorite"));
         if(isFavorite){
-            Users user = um.readByEmailAndPassword(email, password);
-            StampRallys stampRally = srm.read(stampRallyId);
-            try{
-                srm.addFavoriteStampRally(user, stampRally);
-            }catch(Exception ex){
-                //既にお気に入り登録されている場合等の例外
-                System.err.println("既にお気に入り登録されている場合等の例外");
-            }
+            addFavorite(user, stampRally);
             return;
         }
-        
+        srm.removeFavoriteStampRally(user, stampRally);
+    }
+    
+    private void addFavorite(Users user, StampRallys stampRally){        
+        try{
+            srm.addFavoriteStampRally(user, stampRally);
+        }catch(Exception ex){
+            //既にお気に入り登録されている場合等の例外
+            System.err.println("既にお気に入り登録されている場合等の例外");
+        }
     }
 }
