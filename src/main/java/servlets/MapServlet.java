@@ -13,7 +13,9 @@ import javax.servlet.http.HttpServletResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import database.entities.StampPads;
 import database.entities.Stamps;
+import database.entities.Users;
 import database.managers.StampManager;
+import database.managers.UserManager;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -27,13 +29,17 @@ import utilities.ImageUtil;
     StampRallyManager srm;
     @EJB
     StampManager sm;
+    @EJB
+    UserManager um;
     
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("application/json;charset=UTF-8");
 
+        String email = request.getParameter("email");
+        String password = request.getParameter("password");
+        int userId = um.readByEmailAndPassword(email, password).getUserId();
         int stampRallyId = Integer.valueOf(request.getParameter("playingStampRallyId"));
-        int userId = Integer.valueOf(request.getParameter("userId"));
         System.out.println("MapServlet : "+stampRallyId);
 
         List<Stamps> myStamps = sm.findByUserId(userId);
@@ -81,11 +87,8 @@ import utilities.ImageUtil;
     private void calcurateGotStamps(final StampRallys stampRally, List<Stamps> myStamps){
         for (Stamps stamp : stampRally.getStampList()) {
             for (Stamps myStamp : myStamps) {
-                System.out.println(stamp.getStampPads().getStamptableId() + "");
-                System.out.println(stamp.getStampPads() + "");
-                System.out.println(stamp.getStampId() + "");
                 if(myStamp.getStampPads().getStamptableId().equals(stamp.getStampPads().getStamptableId())){
-                    System.out.println("equal!");
+                    System.out.println(stamp.getStampName() + "は取得済みです");
                     stamp.isHaving = true;
                     break;
                 }
