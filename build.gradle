@@ -21,6 +21,8 @@ war {
 ext {
     asadmin = glassFishHome + (isWindows() ? '/bin/asadmin.bat'
                                            : '/bin/asadmin')
+    //大脇用
+    //asadmin = '/Users/air/glassfish_server/bin/asadmin'
     domain = 'domain1'
 }
 
