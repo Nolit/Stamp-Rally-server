@@ -87,4 +87,12 @@ public class StampRallyManager {
             em.remove(likes.get(0));
         }
     }
+    
+    public boolean isFavoriteStampRally(Users user, StampRallys stampRally){
+        List<StampBookLikes> likes = em.createNamedQuery("StampBookLikes.findByUserIdAndStampRallyId", StampBookLikes.class)
+                                .setParameter("userId", user.getUserId())
+                                .setParameter("stampRallyId", stampRally.getStamprallyId())
+                                .getResultList();
+        return likes.isEmpty() ? false : true;
+    }
 }

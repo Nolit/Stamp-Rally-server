@@ -80,6 +80,9 @@ public class StampRallyDetailServlet extends HttpServlet {
         retPageData.setStampRallyReviewPoint(evaluatedPoint);           //参照ユーザーの評価値（スタンプラリーに対する評価値）
         retPageData.setStampRallyReviewAveragePoint(averagedPoint);    //スタンプラリーの平均評価地
         
+        //お気に入り
+        retPageData.setFavorite(srm.isFavoriteStampRally(um.read(loginUserId), stampRally));
+        
         //コンプリートユーザーテーブル
         RallyCompleteUsers RallyCompleteData = srm.getStampRallyCompleteUser(loginUserId, stampRally.getStamprallyId());
         if(RallyCompleteData == null){
