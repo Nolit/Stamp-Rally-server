@@ -1,5 +1,6 @@
 package database.managers;
 
+import database.entities.Friends;
 import database.entities.Users;
 import java.util.List;
 import javax.ejb.Stateless;
@@ -29,6 +30,20 @@ public class UserManager {
                 .setParameter("password", password)
                 .getResultList();
         return list.isEmpty() ? null : list.get(0);
+    }
+    
+    public int getFollowCount(int userId){
+        List<Friends> list = em.createNamedQuery("Friends.findByFollowerId", Friends.class)
+                .setParameter("followerId", userId)
+                .getResultList();
+        return list.isEmpty() ? 0 : list.size();
+    }
+    
+    public int getFollowerCount(int userId){
+        List<Friends> list = em.createNamedQuery("Friends.findByFollowId", Friends.class)
+                .setParameter("followId", userId)
+                .getResultList();
+        return list.isEmpty() ? 0 : list.size();
     }
     
     public void refresh(Users user){

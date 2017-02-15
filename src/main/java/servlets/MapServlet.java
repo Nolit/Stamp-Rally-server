@@ -87,6 +87,7 @@ import utilities.ImageUtil;
     private void calcurateGotStamps(final StampRallys stampRally, List<Stamps> myStamps){
         for (Stamps stamp : stampRally.getStampList()) {
             for (Stamps myStamp : myStamps) {
+                System.out.println(myStamp.getStampId() + " : " + stamp.getStampId());
                 if(myStamp.getStampPads().getStamptableId().equals(stamp.getStampPads().getStamptableId())){
                     System.out.println(stamp.getStampName() + "は取得済みです");
                     stamp.isHaving = true;

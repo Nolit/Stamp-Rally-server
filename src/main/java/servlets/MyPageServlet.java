@@ -49,6 +49,8 @@ public class MyPageServlet extends HttpServlet {
         Users user = um.readByEmailAndPassword(email, password);
         byte[] thumbnail = ImageUtil.read(user.getThumbnail());
         user.setThumbnailData(thumbnail);
+        user.followUserCount = um.getFollowCount(user.getUserId());
+        user.followerCount = um.getFollowerCount(user.getUserId());
         
         ObjectMapper mapper = new ObjectMapper();
         mapper.addMixInAnnotations(Users.class, JsonIgnoreFilter.class);
