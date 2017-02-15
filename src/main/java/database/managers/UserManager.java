@@ -32,17 +32,25 @@ public class UserManager {
         return list.isEmpty() ? null : list.get(0);
     }
     
-    public int getFollowCount(int userId){
-        List<Friends> list = em.createNamedQuery("Friends.findByFollowerId", Friends.class)
-                .setParameter("followerId", userId)
+    public List<Friends> getFollowList(int userId){
+        return em.createNamedQuery("Friends.findByFollowId", Friends.class)
+                .setParameter("followId", userId)
                 .getResultList();
+    }
+    
+    public int getFollowCount(int userId){
+        List<Friends> list = getFollowList(userId);
         return list.isEmpty() ? 0 : list.size();
     }
     
-    public int getFollowerCount(int userId){
-        List<Friends> list = em.createNamedQuery("Friends.findByFollowId", Friends.class)
-                .setParameter("followId", userId)
+     public List<Friends> getFollowerList(int userId){
+        return em.createNamedQuery("Friends.findByFollowerId", Friends.class)
+                .setParameter("followerId", userId)
                 .getResultList();
+     }
+    
+    public int getFollowerCount(int userId){
+        List<Friends> list = getFollowerList(userId);
         return list.isEmpty() ? 0 : list.size();
     }
     

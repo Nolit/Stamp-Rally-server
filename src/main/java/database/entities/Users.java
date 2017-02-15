@@ -204,6 +204,10 @@ public class Users implements Serializable {
         this.privateFlag = privateFlag;
     }
 
+    public void setUserId(int id){
+        this.userId = id;
+    }
+    
     public Integer getUserId() {
         return userId;
     }
