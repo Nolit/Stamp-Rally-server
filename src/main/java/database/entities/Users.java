@@ -174,6 +174,10 @@ public class Users implements Serializable {
     private static boolean MALE = true;
     @Transient
     private static boolean FEMALE = false;
+    @Transient
+    public int followUserCount;
+    @Transient
+    public int followerCount;
 
     public Users(){
         
