@@ -20,6 +20,7 @@ import database.managers.ReviewManager;
 import database.managers.StampRallyManager;
 import database.managers.UserManager;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 import utilities.ImageUtil;
 
@@ -51,8 +52,10 @@ public class StampRallyDetailServlet extends HttpServlet {
         stampRallyId = Integer.parseInt(request.getParameter("stampRallyId"));
 
         //データベース読み込み
-        StampRallyDetailPageData pageData = getPageData(um.read(referenceUserId), srm.read(stampRallyId));
-        StampData[] stampData = getStampData(um.read(referenceUserId).getStampsCollection());
+        Users referenceUser = um.read(referenceUserId);
+        StampRallys stampRally = srm.read(stampRallyId);
+        StampRallyDetailPageData pageData = getPageData(referenceUser, stampRally);
+        StampData[] stampData = copyStampData(readStampData(referenceUser, stampRally));
         
         //Androidにレスポンスを送る
         ObjectMapper mapper = new ObjectMapper();
@@ -108,7 +111,23 @@ public class StampRallyDetailServlet extends HttpServlet {
         return retPageData;
     }
     
-    private StampData[] getStampData(List<Stamps> fromObj){
+    private List<Stamps> readStampData(Users user, StampRallys stampRally){
+        List<Stamps> retStampList = new ArrayList<>();
+        for (Stamps stamp : stampRally.getStampList()) {
+            Stamps insertStamp = stamp;
+            for(Stamps myStamp : user.getStampsCollection()){
+                if(myStamp.getStampPads().getStamptableId().equals(stamp.getStampPads().getStamptableId())){
+                    insertStamp = myStamp;
+                    break;
+                }
+            }
+            retStampList.add(insertStamp);
+        }
+        
+        return retStampList;
+    }
+    
+    private StampData[] copyStampData(List<Stamps> fromObj){
         StampData[] retStampDataArray = new StampData[fromObj.size()];
         for(int i=0; i<fromObj.size(); i++){
             StampData data = new StampData();
