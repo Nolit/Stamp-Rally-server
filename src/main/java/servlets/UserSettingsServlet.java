@@ -39,8 +39,7 @@ public class UserSettingsServlet extends HttpServlet {
         responseUser.setProfile(user.getProfile());
         
         ObjectMapper mapper = new ObjectMapper().setSerializationInclusion(JsonInclude.Include.NON_NULL);
-        mapper.addMixInAnnotations(Users.class, MyPageServlet.JsonIgnoreFilter.class);
-        String json = mapper.writeValueAsString(user);
+        String json = mapper.writeValueAsString(responseUser);
 
         try (PrintWriter out = response.getWriter()) {
             out.println(json);
