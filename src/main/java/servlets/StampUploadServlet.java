@@ -67,6 +67,9 @@ public class StampUploadServlet extends HttpServlet {
             return;
         }
         System.out.println("クリア!");
+        for (Object completedStampId : completedStampIds) {
+            srm.clearStampRally(srm.read((int) completedStampId), user);
+        }
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             out.print(new ObjectMapper().writer().writeValueAsString(true));
