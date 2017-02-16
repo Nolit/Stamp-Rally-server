@@ -36,18 +36,23 @@ public class FollowUserListServlet extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         
         int userId = Integer.valueOf(request.getParameter("referenceUserId"));
+        System.out.println("フォロー・フォロワー ユーザーリスト : " + userId);
         String mode = request.getParameter("mode");
         Users[] friends;
         if(mode.equals("follow")){
+            System.out.println("フォローリスト");
             List<Friends> l =  um.getFollowList(userId);
             friends = new Users[l.size()];
             for(Friends f : l){
+                System.out.println(""+f.getUsers().getUserName());
                 friends[friends.length - 1] = f.getUsers();
             }
         }else{
+            System.out.println("フォロワーリスト");
             List<Friends> l =  um.getFollowerList(userId);
             friends = new Users[l.size()];
             for(Friends f : l){
+                System.out.println(""+f.getUsers1().getUserName());
                 friends[friends.length - 1] = f.getUsers1();
             }
         }

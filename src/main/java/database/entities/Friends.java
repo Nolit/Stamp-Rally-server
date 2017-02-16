@@ -74,8 +74,8 @@ public class Friends implements Serializable {
     
     public Friends(Users followUser, Users follower) {
         this.friendsPK = new FriendsPK(followUser.getUserId(), follower.getUserId());
-        this.users = followUser;
-        this.users1 = follower;
+        this.users = follower;
+        this.users1 = followUser;
         this.followDate = new Date();
     } 
 
