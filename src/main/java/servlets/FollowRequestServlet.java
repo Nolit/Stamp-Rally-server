@@ -25,6 +25,7 @@ public class FollowRequestServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
+        System.out.println("フォローリクエストサーブレット");
         
         String email = request.getParameter("email");
         String password = request.getParameter("password");
@@ -33,8 +34,9 @@ public class FollowRequestServlet extends HttpServlet {
         Users referenceUser = um.read(referenceUserId);
         
         boolean isFollowRequest = Boolean.valueOf(request.getParameter("followRequest"));
-        if(isFollowRequest){
-            loginUser.getFriendsCollection().add(new Friends(loginUser, referenceUser));
+        System.out.println(loginUser.getUserName() + " -> " + referenceUser.getUserName() + " : " + (isFollowRequest ? "フォロー" : "アンフォロー"));
+        if(isFollowRequest && ! um.isFollow(loginUser.getUserId(), referenceUserId)){
+            um.follow(loginUser, referenceUser);
             return;
         }
         um.unFollow(loginUser.getUserId(), referenceUserId);

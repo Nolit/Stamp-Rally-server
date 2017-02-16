@@ -75,6 +75,10 @@ public class UserManager {
         return list.isEmpty() ? 0 : list.size();
     }
     
+    public void follow(Users followUser, Users follower){
+        em.persist(new Friends(followUser, follower));
+    }
+    
     public void unFollow(int followId, int followerId){
         em.createNamedQuery("Friends.deleteByUserSet", Friends.class)
             .setParameter("followId", followId)
