@@ -67,7 +67,7 @@ public class StampRallys implements Serializable {
     private String stamprallyName;
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 255)
+    @Size(min = 0, max = 255)
     @Column(name = "stamrally_comment")
     private String stamrallyComment;
     @Basic(optional = false)
