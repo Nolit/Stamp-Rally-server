@@ -31,7 +31,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "StampBookLikes.findAll", query = "SELECT s FROM StampBookLikes s")
-    , @NamedQuery(name = "StampBookLikes.findByUserIdAndStampRallyId", query = "SELECT s FROM StampBookLikes s WHERE s.userId = :userId AND s.stamprally.stamprallyId = :stampRallyId")
+    , @NamedQuery(name = "StampBookLikes.findByUserId", query = "SELECT s.stamprally FROM StampBookLikes s WHERE s.userId = :userId")
+    , @NamedQuery(name = "StampBookLikes.findByUserIdAndStampRallyId", query = "SELECT s FROM StampBookLikes s WHERE s.userId = :userId AND s.stamprally.stamprallyId = :stampRallyId")    
     , @NamedQuery(name = "StampBookLikes.findByRegistrationDate", query = "SELECT s FROM StampBookLikes s WHERE s.registrationDate = :registrationDate")})
 public class StampBookLikes implements Serializable {
 

@@ -23,6 +23,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "RallyCompleteUsers.findAll", query = "SELECT r FROM RallyCompleteUsers r")
     , @NamedQuery(name = "RallyCompleteUsers.findByAchieverId", query = "SELECT r FROM RallyCompleteUsers r WHERE r.rallyCompleteUsersPK.achieverId = :achieverId")
     , @NamedQuery(name = "RallyCompleteUsers.findByStamprallyId", query = "SELECT r FROM RallyCompleteUsers r WHERE r.rallyCompleteUsersPK.stamprallyId = :stamprallyId")
+    , @NamedQuery(name = "RallyCompleteUsers.getCompletedStampRally", query = "SELECT r.stampRallys FROM RallyCompleteUsers r WHERE r.rallyCompleteUsersPK.achieverId = :achieverId AND r.achieveDate != null")
     , @NamedQuery(name = "RallyCompleteUsers.findByChallangeDate", query = "SELECT r FROM RallyCompleteUsers r WHERE r.challangeDate = :challangeDate")
     , @NamedQuery(name = "RallyCompleteUsers.findByAchieveDate", query = "SELECT r FROM RallyCompleteUsers r WHERE r.achieveDate = :achieveDate")
     , @NamedQuery(name = "RallyCompleteUsers.findByUserIdAndReferenceStamprallyId", query = "SELECT r FROM RallyCompleteUsers r WHERE r.rallyCompleteUsersPK.achieverId = :achieverId AND r.rallyCompleteUsersPK.stamprallyId = :stamprallyId")})

@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 import javax.persistence.Basic;
@@ -116,7 +117,7 @@ public class Users implements Serializable {
     private Collection<Activities> activitiesCollection;
     
     @ManyToMany(mappedBy = "usersCollection")
-    private Collection<StampRallys> stampRallysCollection;
+    private List<StampRallys> stampRallysCollection;
     
     @ManyToMany(mappedBy = "usersCollection")
     private Collection<Questions> questionsCollection;
@@ -327,7 +328,7 @@ public class Users implements Serializable {
     }
 
     @XmlTransient
-    public Collection<StampRallys> getStampRallysCollection() {
+    public List<StampRallys> getStampRallysCollection() {
         return stampRallysCollection;
     }
 

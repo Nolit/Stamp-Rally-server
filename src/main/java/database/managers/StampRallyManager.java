@@ -73,6 +73,18 @@ public class StampRallyManager {
             return ret.size() > 0 ? ret.get(0) : null;
     }
     
+    public List<StampRallys> getCompletedStampRally(Integer achieverId){
+        return em.createNamedQuery("RallyCompleteUsers.getCompletedStampRally", StampRallys.class)
+                .setParameter("achieverId", achieverId)
+                .getResultList();
+    }
+    
+    public List<StampRallys> getFavoriteStampRally(Integer userId){
+        return em.createNamedQuery("StampBookLikes.findByUserId", StampRallys.class)
+                .setParameter("userId", userId)
+                .getResultList();
+    }
+    
     public void addFavoriteStampRally(Users user, StampRallys stampRally){
         StampBookLikes like = new StampBookLikes(user, stampRally);
         em.persist(like);
