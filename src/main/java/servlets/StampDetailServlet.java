@@ -13,6 +13,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import database.entities.StampPads;
 import database.entities.StampRallys;
 import database.entities.Stamps;
+import database.entities.Users;
 import database.managers.StampManager;
 import database.managers.StampRallyManager;
 import java.util.ArrayList;
@@ -35,11 +36,15 @@ public class StampDetailServlet extends HttpServlet {
         //読み込み
         ObjectMapper mapper = new ObjectMapper();
         Stamps stamp = sm.read(Integer.parseInt(request.getParameter("stampId")));
+        Stamps responseStamp = new Stamps();
+        responseStamp.setStampName(stamp.getStampName());
+        responseStamp.setStampComment(stamp.getStampComment());
+        responseStamp.setPicture(ImageUtil.read(stamp.getPicturePass()));
+        Users user = new Users();
+        user.setUserName(stamp.getUserId().getUserName());
+        responseStamp.setUserId(user);
         
-        byte[] image = ImageUtil.read(stamp.getPicturePass());
-        stamp.setPicture(image);
-        
-        String json = mapper.writeValueAsString(stamp);
+        String json = mapper.writeValueAsString(responseStamp);
         
         try (PrintWriter out = response.getWriter()) {
             out.println(json);
