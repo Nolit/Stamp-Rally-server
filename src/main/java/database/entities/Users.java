@@ -178,6 +178,8 @@ public class Users implements Serializable {
     public int followUserCount;
     @Transient
     public int followerCount;
+    @Transient
+    public boolean isFollow;
 
     public Users(){
         

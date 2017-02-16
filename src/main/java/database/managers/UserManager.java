@@ -48,6 +48,13 @@ public class UserManager {
                 .setParameter("followerId", userId)
                 .getResultList();
      }
+     
+     public boolean isFollow(int followId, int followerId){
+        return em.createNamedQuery("Friends.findByFollowSet", Friends.class)
+            .setParameter("followId", followId)
+            .setParameter("followerId", followerId)
+            .getResultList().isEmpty() ? false : true;
+     }
     
     public int getFollowerCount(int userId){
         List<Friends> list = getFollowerList(userId);
