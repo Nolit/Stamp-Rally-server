@@ -90,11 +90,9 @@ public class Users implements Serializable {
     private Date birthday;
     
     @Basic(optional = true)
-    @Size(min = 1, max = 9)
     private String thumbnail;
     
     @Basic(optional = true)
-    @Size(min = 1, max = 9)
     private String profile;
     
     @Basic(optional = true)
