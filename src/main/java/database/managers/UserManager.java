@@ -32,6 +32,20 @@ public class UserManager {
         return list.isEmpty() ? null : list.get(0);
     }
     
+    public Users readByEmail(String email){
+        List<Users> list = em.createNamedQuery("Users.findByMailAddress", Users.class)
+                            .setParameter("mailAddress", email)
+                            .getResultList();
+        return list.isEmpty() ? null : list.get(0);
+    }
+    
+    public Users readBySearchId(String searchId){
+        List<Users> list = em.createNamedQuery("Users.findBySearchId", Users.class)
+                            .setParameter("searchId", searchId)
+                            .getResultList();
+        return list.isEmpty() ? null : list.get(0);
+    }
+    
     public List<Friends> getFollowList(int userId){
         return em.createNamedQuery("Friends.findByFollowId", Friends.class)
                 .setParameter("followId", userId)
