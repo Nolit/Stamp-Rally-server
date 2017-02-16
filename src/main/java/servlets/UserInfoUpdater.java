@@ -47,13 +47,13 @@ public class UserInfoUpdater extends HttpServlet {
         Users loginUser = um.read(userId);
         Users responseUser = new Users();
         
-        if(um.readByEmail(email) == null){
+        if(loginUser.getMailAddress().equals(email) || um.readByEmail(email) == null){
             loginUser.setMailAddress(email);
             responseUser.setMailAddress(email);
         }else{
             System.out.println("そのemailは使われています");
         }
-        if(um.readBySearchId(searchId) == null){
+        if(loginUser.getSearchId().equals(searchId) || um.readBySearchId(searchId) == null){
             loginUser.setSearchId(searchId);
             responseUser.setSearchId(searchId);
         }else{

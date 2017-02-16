@@ -27,6 +27,7 @@ public class UserSettingsServlet extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         
+        System.out.println("ユーザー情報設定ページ");
         String email = request.getParameter("email");
         String password = request.getParameter("password");
         Users user = um.readByEmailAndPassword(email, password);
