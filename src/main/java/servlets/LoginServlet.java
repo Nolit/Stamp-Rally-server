@@ -1,5 +1,6 @@
 package servlets;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import database.entities.Users;
 import database.managers.UserManager;
@@ -34,10 +35,11 @@ public class LoginServlet extends HttpServlet {
             System.out.println("デバッグ:ログインユーザーがnullです");
         }
         
-        ObjectMapper mapper = new ObjectMapper();
-        String json = mapper.writeValueAsString(loginUser);
         try (PrintWriter out = response.getWriter()) {
-            out.println(json);
+            if(loginUser != null){
+                out.print(loginUser.getUserId() + "," + loginUser.getMailAddress() + "," + loginUser.getPassword());
+            }
+
         }
 
     }

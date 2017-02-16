@@ -6,6 +6,7 @@
 package servlets;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import database.entities.Activities;
 import database.entities.Admins;
@@ -47,12 +48,13 @@ public class MyPageServlet extends HttpServlet {
         String email = request.getParameter("email");
         String password = request.getParameter("password");
         Users user = um.readByEmailAndPassword(email, password);
+        System.out.println("マイページ : " + user.getUserName());
         byte[] thumbnail = ImageUtil.read(user.getThumbnail());
         user.setThumbnailData(thumbnail);
         user.followUserCount = um.getFollowCount(user.getUserId());
         user.followerCount = um.getFollowerCount(user.getUserId());
         
-        ObjectMapper mapper = new ObjectMapper();
+        ObjectMapper mapper = new ObjectMapper().setSerializationInclusion(JsonInclude.Include.NON_NULL);
         mapper.addMixInAnnotations(Users.class, JsonIgnoreFilter.class);
         String json = mapper.writeValueAsString(user);
 
