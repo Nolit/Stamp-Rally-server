@@ -17,6 +17,9 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
+import utilities.StringDecoder;
 
 @WebServlet(name = "UserInfoUpdater", urlPatterns = {"/updateUserInfo"})
 public class UserInfoUpdater extends HttpServlet {
@@ -30,8 +33,15 @@ public class UserInfoUpdater extends HttpServlet {
         String email = request.getParameter("email");
         String password = request.getParameter("password");
         String searchId = request.getParameter("searchId");
-        String userName = request.getParameter("userName");
-        String profile = request.getParameter("profile");
+        String userName = StringDecoder.decode(request.getParameter("userName"));
+        String profile = StringDecoder.decode(request.getParameter("profile"));
+        System.out.println("ユーザー情報更新");
+        System.out.println("email : " + email);
+        System.out.println("password : " + password);
+        System.out.println("searchId : " + searchId);
+        System.out.println("userName : " + userName);
+        System.out.println("profile : " + profile);
+        
         
         int userId = Integer.valueOf(request.getParameter("userId"));
         Users loginUser = um.read(userId);
@@ -39,62 +49,37 @@ public class UserInfoUpdater extends HttpServlet {
         
         if(um.readByEmail(email) == null){
             loginUser.setMailAddress(email);
-        }else{
             responseUser.setMailAddress(email);
+        }else{
+            System.out.println("そのemailは使われています");
         }
         if(um.readBySearchId(searchId) == null){
             loginUser.setSearchId(searchId);
-        }else{
             responseUser.setSearchId(searchId);
+        }else{
+            System.out.println("そのsearch_idは使われています");
         }
         loginUser.setPassword(password);
         loginUser.setUserName(userName);
         loginUser.setProfile(profile);
+        um.update(loginUser);
         
-        ObjectMapper mapper = new ObjectMapper().setSerializationInclusion(JsonInclude.Include.NON_NULL);
+        ObjectMapper mapper = new ObjectMapper();
         String json = mapper.writeValueAsString(responseUser);
         try (PrintWriter out = response.getWriter()) {
             out.println(json);
         }
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
     }
 
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
     }
-
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
-    @Override
-    public String getServletInfo() {
-        return "Short description";
-    }// </editor-fold>
-
 }
